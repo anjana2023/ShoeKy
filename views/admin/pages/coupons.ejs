@@ -1,0 +1,57 @@
+<div class="row">
+   
+    <div class="col-lg-12 d-flex align-items-stretch">
+        <div class="card w-100">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-semibold mb-4">Coupons</h5>
+                <div class="table-responsive">
+                    <table id="couponTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Coupon Type</th>
+                                <th>Coupon Amount</th>
+                                <th>Description</th>
+                                <th>Min Amount</th>
+                                <th>Max Amount</th>
+                                <th>Expiry Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% coupons?.forEach(coupon => { %>
+                            <tr>
+                                <td class="text-center"><%= coupon?.code %></td>
+                                <td class="text-center"><%= coupon?.type.toUpperCase() %></td>
+                                <td class="text-center"><%= coupon?.value %></td>
+                                <td class="text-center"><%= coupon?.description %></td>
+                                <td class="text-center"><%= coupon?.minAmount %></td>
+                                <td class="text-center"><%= coupon?.maxAmount %></td>
+                                <td class="text-center">
+                                    <%= new Date(coupon?.expiryDate).toLocaleDateString('en-US', { year: 'numeric', month:
+                                    'long', day: 'numeric' }) %>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/admin/coupon/edit/<%= coupon?._id %>" class="btn btn-sm btn-primary" style="color: white;">
+                                        <i class="ti ti-edit"></i> Edit
+                                    </a>
+                                </td>
+                                
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        new DataTable('#couponTable');
+
+    })
+</script>

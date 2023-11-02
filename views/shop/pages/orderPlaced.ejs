@@ -1,0 +1,34 @@
+<div class="checkout-area py-3" style="background-color: #fff; color: #333;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="card" style="background-color: #fff; border: 20px solid #ddd; box-shadow: 6 4px 4px rgba(0, 0, 0, 0.1); height: auto;">
+                    <div class="card-body p-2 text-center">
+                        <b><h2 class="text-center" style="color: #000000;">Order Placed</h2></b>
+                        <hr />
+
+                        <!-- Display order details from the provided data -->
+                        <p class="text-center" ><strong>Order ID:</strong> <span style="color: #333;"><%= order.orderId %></span></p>
+                        <p class="text-center" ><strong>Shipping Address:</strong> <span style="color: #333;"><%= order.street %>, <%= order.city %>, <%= order.state %></span></class="text-center" >
+                        <p class="text-center" ><strong>Phone:</strong> <span style="color: #333;"><%= order.phone %></span></class="text-center" >
+                        <p class="text-center" ><strong>Total Price:</strong> <span style="color: #333;">₹<%= order.totalPrice %></span></class="text-center" >
+                        <p class="text-center" ><strong>Ordered Date:</strong> <span style="color: #333;"><%= new Date(order.orderedDate).toLocaleString() %></span></p>
+
+                        <h4 class="text-center " style="color: #ff5733;">Order Items</h4>
+                        <% order.orderItems.forEach(product => { %>
+                            <ul class="list-group">
+                                <li class="list-group-item text-center" style="background-color: #fff; color: #333;">
+                                    Product Name: <span style="color: #333;"><%= product.product.title %></span>
+                                    <span class="badge badge-primaryt ext-center" style="background-color: #ff5733;">Quantity: <%= product.quantity %></span>
+                                </li>
+                            </ul>
+                        <% }) %>
+
+                        <a href="/shop" class="btn btn-dark mt-3 text-center" style="background-color: #ff5733; color: #fff;">Continue Shopping</a>
+                        <a href="/orders" class="btn btn-dark mt-3" style="background-color: #ff5733; color: #fff;">View Orders</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

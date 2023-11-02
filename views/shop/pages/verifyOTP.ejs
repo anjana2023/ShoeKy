@@ -1,0 +1,70 @@
+<div class="container mt-5 my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <% if (messages && messages.length > 0) { %>
+            <div class="alert alert-danger fade show mt-3 custom-alert" role="alert">
+                <%= messages %>
+            </div>
+            <% } %>
+            <% if (email && email.length > 0) { %>
+            <div class="alert alert-info fade show mt-3 custom-alert" role="alert">
+                An OTP is sent to your <%- email %>, please verify!
+            </div>
+            <% } %>
+            <div class="card custom-card">
+                <div class="card-header custom-card-header">
+                    <h5 class="card-title">OTP Verification</h5>
+                </div>
+                <div class="card-body text-center">
+                    <form action="/sendOTP" method="post">
+                        <div class="form-group">
+                            <label for="otp">Enter OTP:</label>
+                            <input type="text" class="form-control custom-input" id="otp" name="otp" placeholder="Enter OTP" required>
+                        </div>
+                        <button type="submit"  id="otpverify" class="btn btn-primary mt-2 custom-button">Verify OTP</button>
+                    </form>
+                    <button type="submit" id="resendOTPButton" class="btn btn-warning mt-3 custom-button text-light" disabled><a href="/reSendOTP">Resend OTP</a></button>
+                    <div id="timer" class="mt-3 custom-timer">Timer: 1:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* custom-style.css */
+    
+    /* Your existing CSS styles remain the same */
+</style>
+
+<script>
+    // Set the initial time to 60 seconds (1 minute)
+    let timerSeconds = 30;
+
+    // Function to update the timer display
+    function updateTimer() {
+        const timerElement = document.getElementById("timer");
+        timerElement.textContent = `Timer: ${Math.floor(timerSeconds / 60)}:${(timerSeconds % 60)
+            .toString()
+            .padStart(2, "0")}`;
+
+        if (timerSeconds <= 0) {
+
+            document.getElementById("resendOTPButton").removeAttribute("disabled");
+            document.getElementById("otpverify").setAttribute("disabled", true); 
+        }
+        
+        else {
+            // Continue the countdown
+            // document.getElementById("otpverify").setAttribute("enabled", true); // Disable the Verify OTP button
+            timerSeconds--;
+            setTimeout(updateTimer, 1000); // Update the timer every 1 second
+        }
+    }
+    updateTimer();
+
+    const alert = document.getElementById('message')
+    setTimeout(() => {
+        alert.style.display = 'none'
+    }, 4000);
+</script>

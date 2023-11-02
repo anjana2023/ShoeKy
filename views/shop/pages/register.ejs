@@ -1,0 +1,61 @@
+<div class="breadcrumb-area pt-205 pb-210" style="background-image: url(/assets/img/instra/about1.jpg)">
+    <div class="container">
+        <div class="breadcrumb-content text-center">
+            <h2>register</h2>
+            <ul>
+                <li><a href="/">home</a></li>
+                <li> register </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- register-area start -->
+
+
+<div class="register-area ptb-100">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-12 col-lg-12 col-xl-6 ms-auto me-auto">
+                <div class="login bg-light">
+                    <div class="login-form-container">
+                        <% if (typeof userCheck !== 'undefined') { %>
+                            <div class="alert alert-danger show mt-3"  ="message" role="alert">
+                              <%- userCheck %>
+                            </div>
+                            <% } %>
+        <div class="alert alert-danger fade show mt-3" id="error-message" role="alert" style="display: none;"></div>
+                        <div class="login-form">
+                            <!-- <form action="" method="post"> -->
+                            <form action="" method="post" onsubmit="return validateForm()">
+                                <input type="text" id="user-name" name="userName" placeholder="UserName"  required>
+
+                                <input type="email" id="user-email" name="email" placeholder="Email"   required>                                      
+                            
+                                <input type="password" id="user-password"name="password" placeholder="Password" required>
+
+                                <input type="password" id="user-repassword" name="repeat-password" placeholder="Repeat Password" required>
+
+                                <div class="button-box">
+                                    <button type="submit" class="default-btn floatright">Register</button>
+                                </div>
+
+                                <% if (typeof message !=='undefined' ) { %>
+                                    <div class="alert alert-success fade show mt-3" id="message" role="alert"">
+                                        <%= message %>
+                                    </div>
+                                    <% } %>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/js/shop/registerValidation.js"></script>
+
+
+<!-- register-area end -->

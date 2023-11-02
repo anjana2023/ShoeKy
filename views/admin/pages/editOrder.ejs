@@ -1,0 +1,133 @@
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between">
+                <h4 class="mb-0"><%= order.orderId %></h4>
+                <img style="width: 40px; height: 40px" class="rounded-5" src="<%= order.user.image %>" alt="" />
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-start gap-5">
+                    <div class="">
+                        <h6 class="card-subtitle mb-2 text-muted">Customer Information</h6>
+                        <p>
+                            <strong>Name:</strong> <%= order.user.firstName %>, <%= order.user.lastName %> -
+                            <a href="/admin/customers/view/<%= order.user._id %>"><%= order.user.email %></a>
+                        </p>
+                        <p><strong>Address:</strong> <%= order.street %>, <%= order.city %>, <%= order.state %></p>
+                        <p><strong>Phone: </strong><%= order.phone %></p>
+                    </div>
+                    <div class="">
+                        <h6 class="card-subtitle mb-2 text-muted">Order Information</h6>
+                        <p><strong>Payment Method:</strong> <%= order.payment_method %></p>
+                        <% if (order?.coupon?.code) { %>
+                        <p><strong>Coupon: </strong><%= order.coupon.code %></p>
+                        <p><strong>Discount: </strong><%= order.discount %></p>
+                        <% } %>
+                    </div>
+                    <div class="">
+                        <h6 class="card-subtitle mb-2 text-muted">Other Information</h6>
+                        <p><strong>Total Amount:</strong> <%= order.totalPrice %></p>
+                        <p><strong>Wallet Amount:</strong> <%= order.wallet %></p>
+                    </div>
+                </div>
+
+                <hr class="border-1 bg-dark" />
+
+                <h6 class="card-subtitle mb-2 text-muted mt-4">Order Details</h6>
+                <!-- Product  -->
+                <% order.orderItems.forEach((item, index) => { %>
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <small><%= %></small>
+                        <img
+                            src="<%= item.product.images[0].thumbnailUrl %>"
+                            alt="Product 1"
+                            class="img-fluid img-thumbnail"
+                        />
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <p><strong><%= item.product.title %></strong></p>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <% if (item.status === 'Pending') { %>
+                        <p><strong class="bg-warning text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <% } else if (item.status === "Shipped") { %>
+                        <p><strong class="bg-primary text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <% } else if (item.status === "Delivered") { %>
+                        <p><strong class="bg-success text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <% } else if (item.status === "Cancelled") { %>
+                        <p><strong class="bg-danger text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <% } else if (item.status === "Returned") { %>
+                        <p><strong class="bg-info text-white px-3 py-2 rounded-pill"><%= item.status %></strong></p>
+                        <% } %>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <p><strong>Quantity:</strong> <%= item.quantity %></p>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <p><strong>Price:</strong> <%= item.price %></p>
+                    </div>
+                    <% if (item.status !== "Cancelled" && item.status !== "Delivered" && item.status !== "Return Requested"
+                    && item.status !== "Returned") { %>
+                    <div class="col-md-2 d-flex flex-column d-flex flex-column justify-content-center">
+                        <form action="/admin/orders/update/<%= item._id %>?_method=PUT" method="post">
+                            <select name="status" class="form-control mb-3">
+                                <% if (item.status === "Pending") { %>
+                                    <option value="Pending" <%= item.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                    <option value="Shipped" <%= item.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                    <option value="Delivered" <%= item.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                    <option value="Cancelled" <%= item.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                <% } else if (item.status === "Shipped") { %>
+                                    <option value="Shipped" <%= item.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                    <option value="Delivered" <%= item.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                    <option value="Cancelled" <%= item.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                <% } %>
+                            </select>
+                            <button class="btn btn-sm btn-primary btn-block" type="submit">Update</button>
+                        </form>
+                    </div>
+
+                    <% } else if (item.status === "Delivered") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <img
+                            style="width: 100px; height: 100px"
+                            src="/admin/images/icons/delivered.svg"
+                            alt="Delivered"
+                            class="icon"
+                        />
+                    </div>
+                    <% } else if (item.status === "Cancelled") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <img
+                            style="width: 100px; height: 100px"
+                            src="/admin/images/icons/cancelled.svg"
+                            alt="Cancelled"
+                            class="icon"
+                        />
+                    </div>
+                    <% } else if (item.status === "Return Requested") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <form action="/admin/orders/update/<%= item._id %>?_method=PUT" method="post">
+                            <button class="btn btn-danger text-white">Confirm Return</button>
+                        </form>
+                    </div>
+                    <% } else if (item.status === "Returned") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <img
+                            style="width: 100px; height: 100px"
+                            src="/admin/images/icons/refunded.svg"
+                            alt="Cancelled"
+                            class="icon"
+                        />
+                    </div>
+                    <% } %>
+                </div>
+                <% if (index !== order.orderItems.length - 1) { %>
+                <hr class="border-1 bg-dark" />
+                <% } %> <% }) %>
+
+                <!-- Product End -->
+            </div>
+        </div>
+    </div>
+</div>

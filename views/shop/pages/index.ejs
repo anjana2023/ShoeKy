@@ -1,0 +1,249 @@
+
+    <!-- header end -->
+    <!-- banner area start -->
+    <div class="banner-area">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <div class="single-banner">
+                    <a href="#"><img src="assets/img/banner/nyk5.1bg.jpg" alt=""></a>
+                    <div class="banner-content banner-content-style1">
+                        <h2>Get <br> <span>Style</span></h2>
+                        <p>Wear dreams on feets</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="single-banner">
+                    <a href="#"><img src="assets/img/banner/nyk3.1bg.jpg" alt=""></a>
+                    <div class="banner-content banner-content-style2">
+                        <span>-  Up to  -</span>
+                        <h2>30% off</h2>
+                        <p>Black Friday Discount</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="single-banner">
+                    <a href="#"><img src="assets/img/banner/nyk4bg.jpg" alt=""></a>
+                    <div class="banner-content banner-content-style3">
+                        <h2>Trand <br>2023.</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner area end -->
+    <!-- product area start -->
+    <div class="product-area pt-115 pb-120">
+        <div class="pl-100 pr-100">
+            <div class="container-fluid">
+                <div class="section-title text-center mb-60">
+                    <h2>New Arrivals</h2>
+                </div>
+                <div class="product-style">
+                    <div class="arrival-active owl-carousel">
+                        <% if (products.length>0) { %>
+                            <% products.forEach(element=> { %>
+                        <div class="product-wrapper">
+
+                                    <% if (Array.isArray(element.images) && element.images.length> 0) { %>
+
+
+                            <div class="product-img">
+                                
+                                <a href="/viewProduct/<%= element._id %>">
+                                    <img src="<%= element.images[0].imageUrl %>" alt="">
+                                </a>
+                                <% } %>
+
+                                
+                                <div class="product-action">
+                                    <!-- <a class="animate-left" title="Wishlist" href="#">
+                                        <i class="pe-7s-like"></i>
+                                    </a>
+                                    <a class="animate-top" title="Add To Cart" href="#">
+                                        <i class="pe-7s-cart"></i>
+                                    </a> -->
+                                    <a class="animate-right" title="Quick View" href="/viewProduct/<%= element?._id %>">
+
+                                        <i class="pe-7s-look"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="product-content">
+                                <h4><b><a href="/viewProduct/<%= element._id%>">  <%= element.title %></a></b></h4>
+                                <!-- <span>$115.00</span> -->
+                                <p class="text-decoration-line-through">₹<%=
+                                    (element.productPrice).toLocaleString() %>
+                            </p>
+                            <h5>₹<%=( element.salePrice).toLocaleString() %>
+                            </h5>
+                            </div>
+                        </div>
+                        <% }); %>
+                        <% } else { %>
+                            <h2>No Products</h2>
+                            <% } %>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- product area end -->
+    <!-- banner area two start -->
+    <div class="banner-area-two">
+        <div class="container">
+            <div class="row g-0">
+                <div class="col-lg-6 col-xl-6">
+                    <div class="banner-wrapper mrgn-r-4">
+                        <a href="#"><img src="assets/img/banner/nyk6bg.jpg" alt=""></a>
+                        <div class="banner-wrapper-content">
+                            <h3>20% <br><span>off</span></h3>
+                            <h2><span>Trending</span> <br>Fashion <br>2023...</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-xl-6">
+                    <div class="row g-0">
+                        <div class="col-lg-12">
+                            <div class="banner-wrapper mrgn-b-4">
+                                <a href="#"><img src="assets/img/banner/nyk7.1bg.jpg" alt=""></a>
+                                <div class="banner-wrapper-content2">
+                                    <h3>Branded <br>Collection.</h3>
+                                    <a href="/">shop now</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- all products area end -->
+    <!-- brand logo area start -->
+    <div class="brand-logo-area pl-100 pr-100">
+        <div class="ptb-135 gray-bg">
+            <div class="brand-logo-active owl-carousel">
+                <div class="single-brand">
+                    <img src="assets/img/brand-logo/1.png" alt="">
+                </div>
+                <div class="single-brand">
+                    <img src="assets/img/brand-logo/2.png" alt="">
+                </div>
+                <div class="single-brand">
+                    <img src="assets/img/brand-logo/1.png" alt="">
+                </div>
+                <div class="single-brand">
+                    <img src="assets/img/brand-logo/3.png" alt="">
+                </div>
+                <div class="single-brand">
+                    <img src="assets/img/brand-logo/4.png" alt="">
+                </div>
+                <div class="single-brand">
+                    <img src="assets/img/brand-logo/5.png" alt="">
+                </div>
+                <div class="single-brand">
+                    <img src="assets/img/brand-logo/6.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- brand logo area end -->
+    <!-- banner3 area start -->
+    <div class="banner-area3 pt-120 pb-115">
+        <div class="pl-100 pr-100">
+            <div class="container">
+                <div class="row g-0">
+                    <div class="col-md-12 col-lg-4 col-xl-4">
+                        <div class="banner-wrapper mrgn-negative">
+                            <a href="#"><img src="assets/img/banner/nyk15bg.jpg" alt=""></a>
+                            <div class="banner-wrapper2-content">
+                                <h3>Speatial </h3>
+                                <h2>Style</h2>
+                                <span>Start from $299.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-8 col-xl-8">
+                        <div class="row g-0 banner-mrg">
+                            <div class="col-md-6">
+                                <div class="banner-wrapper mrgn-b-5 mrgn-r-5 ">
+                                    <img src="assets/img/banner/nyk13bg.jpg" alt="">
+                                    <div class="banner-wrapper3-content">
+                                        <a href="#">Shop Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="banner-wrapper mrgn-b-5">
+                                    <img src="assets/img/banner/nyk9bg.jpg" alt="">
+                                    <div class="banner-wrapper3-content banner-text-color">
+                                        <a href="#">Shop Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-6">
+                                <div class="banner-wrapper mrgn-r-5">
+                                    <img src="assets/img/banner/nyk8bg.jpg" alt="">
+                                    <div class="banner-wrapper3-content">
+                                        <a href="#">Shop Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="banner-wrapper">
+                                    <img src="assets/img/banner/nyk15bg.jpg" alt="">
+                                    <div class="banner-wrapper3-content">
+                                        <a href="#">Shop Now</a>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner3 area end -->
+    <!-- insta feed start -->
+    <div class="insta-feed ptb-120  gray-bg">
+        <div class="pl-185 pr-185">
+            <div class="section-title-2 text-center mb-50">
+                <h2>Insta Feed</h2>
+                <h4>Follow us on intagram. <span>@Ezonepro</span></h4>
+            </div>
+            <div class="instafeed-wrapper">
+                <div class="instafeed-active owl-carousel">
+                    <div class="instafeed-img">
+                        <img src="assets/img/instra/nyk20bg.jpg" alt="">
+                    </div>
+                    <div class="instafeed-img">
+                        <img src="assets/img/instra/nyk21bg.jpg" alt="">
+                    </div>
+                    <div class="instafeed-img">
+                        <img src="assets/img/instra/nyk23bg.jpg" alt="">
+                    </div>
+                    <div class="instafeed-img">
+                        <img src="assets/img/instra/nyk24bg.jpg" alt="">
+                    </div>
+                    <div class="instafeed-img">
+                        <img src="assets/img/instra/nyk25bg.jpg" alt="">
+                    </div>
+                    <div class="instafeed-img">
+                        <img src="assets/img/instra/nyk15bg.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- insta feed end -->
+    
+   

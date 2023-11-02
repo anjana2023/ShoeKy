@@ -1,0 +1,168 @@
+
+    <div class="container mt-4">
+        <h1>User Management</h1>
+
+    
+        <div class="col-search mx-5">
+            <form class="searchform" action="/admin/user/search" method="post">
+                <div class="input-group">
+                    <input list="search_terms" type="text" class="form-control" name="search" placeholder="Search a user">
+                    <button class="btn btn-light bg" type="submit"> <i class="material-icons md-search"></i></button>
+                </div>
+            </form>
+        </div>
+<table class="table mt-3" id="users">
+    <thead>
+        <tr>
+            <th>Profile</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (users?.length > 0) { %>
+            <% for (let i = 0; i < users.length; i++) { %>
+                <% if (users[i].userName === 'Admin') { continue; } %>
+                <tr>
+                    <td><i class="fas fa-user-circle fa-lg"></i></td>
+                    <td><%- users[i].userName %></td>
+                    <td><%- users[i].email %></td>
+                    <td>
+
+                        <% if (users[i].isBlock) { %>
+
+                            <button type="submit" class="btn btn-success btn-sm block-button"
+                                    id="unblockUserButton"
+                                    onclick="showConfirmation('<%- users[i]?._id %>')">unblock</button>
+
+                            <% } else { %>
+
+                                <button type="submit" class="btn btn-danger btn-sm block-button"
+                                    id="blockUserButton"
+                                    onclick="getConfirmation('<%- users[i]?._id %>')">Block</button>
+
+                                <% } %>
+
+                    </td>
+                </tr>
+            <% } %>
+        <% } else { %>
+            <tr>
+                <td colspan="4"><h2>NO USERS FOUND</h2></td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+
+    </div>
+
+   
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <!-- Similar structure as the Add User Modal -->
+    </div>
+
+    <!-- Include Bootstrap JS (jQuery and Popper.js required) -->
+  
+    <script>
+        $(document).ready(function () {
+            new DataTable('#users');
+    
+        })
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function getConfirmation(userId) {
+        console.log("This is user id", userId);
+
+        Swal.fire({
+            title: "Block User ?",
+            text: "Are you sure to block",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "No, Cancel",
+            confirmButtonText: "Yes, Proceed",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/admin/user/blockUser/" + userId,
+                    method: 'post',
+                    success: (response) => {
+                        console.log("Response from server:", response); // Add this line for debugging
+                        console.log(response.message)
+                        if (response.message) {
+                            console.log("User Blocked Successfully"); // Add this line for debugging
+
+                            // Show a success message immediately
+                            Swal.fire({
+                                title: "User Blocked",
+                                text: "User Blocked Successfully",
+                                icon: "success",
+                            });
+
+                            // Then reload the page after a short delay
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            console.log("Error");
+                        }
+                    },
+                    error: (error) => {
+                        console.error("Error during the AJAX request:", error); // Add this line for debugging
+                    }
+                });
+            }
+        });
+    }
+</script>
+<script>
+    function showConfirmation(userId) {
+        console.log("This is user id", userId);
+
+        Swal.fire({
+            title: "unblock User ?",
+            text: "Are you change yr mind to  unblock",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "No, Cancel",
+            confirmButtonText: "Yes, Proceed",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/admin/user/unblockUser/" + userId,
+                    method: 'post',
+                    success: (response) => {
+                        console.log("Response from server:", response); // Add this line for debugging
+                        console.log(response.message)
+                        if (response.message) {
+                            console.log("User Blocked Successfully"); // Add this line for debugging
+
+                            // Show a success message immediately
+                            Swal.fire({
+                                title: "User unBlocked",
+                                text: "User Blocked Successfully",
+                                icon: "success",
+                            });
+
+                            // Then reload the page after a short delay
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            console.log("Error");
+                        }
+                    },
+                    error: (error) => {
+                        console.error("Error during the AJAX request:", error); // Add this line for debugging
+                    }
+                });
+            }
+        });
+    }
+</script>
+    

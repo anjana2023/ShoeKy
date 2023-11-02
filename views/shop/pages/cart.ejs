@@ -1,0 +1,314 @@
+
+<!-- shopping-cart-area end -->
+
+<style>
+  .quantity-input {
+    max-width: 30px;
+    max-height: 30px;
+  }
+</style>
+
+<div class="breadcrumb-area" style="background-color: black; color: white">
+  <div class="container">
+    <div class="breadcrumb-content text-center pt-1">
+      <ul>
+        <li>
+          <h3><a href="/">Home</a></h3>
+        </li>
+        <li>
+          <h3 style="color: white">/</h3>
+        </li>
+        <li>
+          <h3 style="color: white">Cart</h3>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- shopping-cart-area start -->
+<!-- shopping-cart-area start -->
+<div class="cart-main-area pt-95 pb-100">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <h1 class="cart-heading">Cart</h1>
+        <form action="/checkout" method="post">
+          <div class="table-content table-responsive">
+            <table class="table-striped">
+              <thead class="bg-dark">
+                <tr>
+                  <th class="text-white">remove</th>
+                  <th class="text-white">images</th>
+                  <th class="text-white">Product</th>
+                  <th class="text-white">Price</th>
+                  <th class="text-white">Quantity</th>
+                  <th class="text-white">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (cartItems) { %> <% cartItems?.products?.forEach((product,
+                index)=> { %>
+                <tr>
+                  <td class="product-remove">
+                    <a href="/remove/<%= product.product._id %>"
+                      ><i class="pe-7s-close text-bg-danger"></i
+                    ></a>
+                  </td>
+                  <td class="product-thumbnail">
+                    <a href="/product/<%= product.product._id %>">
+                      <% if (product.product && product.product.images &&
+                      product.product.images[0] &&
+                      product.product.images[0].thumbnailUrl) { %>
+                      <img
+                        src="<%= product.product.images[0].thumbnailUrl %>"
+                        alt="Thumbnail"
+                        class="img-thumbnail"
+                      />
+                      <% } else { %>
+                      <!-- Handle the case where thumbnailUrl is not available -->
+                      <img
+                        src="placeholder-thumbnail-url.jpg"
+                        alt="Placeholder"
+                        class="img-thumbnail"
+                      />
+                      <% } %>
+                    </a>
+                  </td>
+
+                  <td class="product-name">
+                    <a href="/product/<%= product.product._id %>">
+                      <%= product.product.title %>
+                    </a>
+                    <% if (product.product.isDeleted) { %>
+                    <p class="text-danger">Currently Unavailable</p>
+                    <% } else if (product.product.quantity < product.quantity) {
+                    %>
+                    <p class="text-danger">Out of Stock</p>
+                    <% } %>
+                  </td>
+                  <td class="product-price-cart">
+                    <span
+                      >₹
+                      <span class="amount">
+                        <% const
+                        productPrice=parseFloat(product.product.salePrice) %>
+                        <%= productPrice.toFixed(2) %>
+                      </span>
+                    </span>
+                  </td>
+
+                  <td class="text-center">
+                    <div class="btn-group" role="group" aria-label="Quantity">
+                      <a
+                        href="javascript:void(0);"
+                        class="btn btn-danger h-auto minusBtn"
+                        data-product-id="<%= product.product._id %>"
+                      >
+                        <i class="ti ti-minus"></i>
+                      </a>
+                      <span
+                        class="btn btn-light h-auto quantity"
+                        id="quantity_<%= product.product._id %>"
+                      >
+                        <%= product.quantity %>
+                      </span>
+
+                      <a
+                        href="javascript:void(0);"
+                        class="btn btn-primary h-auto plusBtn"
+                        data-product-id="<%= product.product._id %>"
+                        id="plusBtn"
+                      >
+                        <i class="ti ti-plus"></i>
+                      </a>
+                    </div>
+                  </td>
+
+                  <td
+                    class="product-subtotal"
+                    id="totalProductPrice_<%= product.product._id %>"
+                  >
+                    <% if (product.product) { %> <% const
+                    productTotal=parseFloat(product.product.salePrice); %> <%
+                    const productQuantity=parseInt(product.quantity, 10); %> <%
+                    const totalProductPrice=productTotal * productQuantity; %>
+                    <%= totalProductPrice.toFixed(2) %> <% } else { %>
+                    <!-- Handle the case where product information is not available -->
+                    ₹0.00 <% } %>
+                  </td>
+                </tr>
+                <% }) %> <% } %>
+              </tbody>
+            </table>
+          </div>
+          <% if (cartItems && cartItems.products.length>=0) { %>
+
+          <div class="row">
+            <div class="col-md-5 ms-auto">
+              <div class="cart-page-total">
+                <h2>Cart totals</h2>
+                <ul>
+                  <li>
+                    Subtotal
+                    <span
+                      >₹
+                      <span id="subtotal">
+                        <%= subtotal.toFixed(2) %>
+                      </span></span
+                    >
+                  </li>
+
+                  <li class="d-none" id="couponList">
+                    Discount <span>₹ <span id="appliedCoupon"></span></span>
+                  </li>
+                  <li>
+                    Total
+                    <span
+                      >₹
+                      <span id="cart-total">
+                        <%= total.toFixed(2) %>
+                      </span></span
+                    >
+                  </li>
+                </ul>
+                <% if (cartItems.products.some(product=>
+                product.product.quantity < product.quantity ) ||
+                cartItems.products.some(product=> product.product.isDeleted)) {
+                %>
+                <button
+                  class="btn btn-secondary cursor-na btn-dark"
+                  type="submit"
+                  disabled
+                >
+                  Proceed to checkout
+                </button>
+                <% } else { %>
+                <button id="checkoutBtn" class="btn btn-dark">
+                  Proceed to checkout
+                </button>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <% } else { %>
+          <div class="text-center">
+            <p>No Items in the cart</p>
+            <a href="/shop" class="btn btn-dark h-auto">Shop Now</a>
+          </div>
+          <% } %>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- shopping-cart-area end -->
+
+<script>
+  let data;
+  const checkoutBtn = document.getElementById("checkoutBtn");
+
+  function updateCartMessage(data) {
+    const cartMessage = document.getElementById("cart-message");
+
+    // Update the cart message
+    cartMessage.innerHTML = data.message;
+    cartMessage.className = `position-fixed bg-${data.status} text-white p-2 rounded`;
+    cartMessage.style.display = "block";
+
+    // Hide the cart message after 3 seconds
+    setTimeout(function () {
+      cartMessage.style.display = "none";
+    }, 3000);
+  }
+
+  function updateCartCount(data) {
+    const cartCount = document.getElementById("cartCount");
+
+    // Update the cart count (if available)
+    if (data.count !== undefined) {
+      cartCount.innerText = data.count;
+    }
+  }
+
+  function updateQuantityDisplay(id, data) {
+    const quantitySpan = document.getElementById(`quantity_${id}`);
+    const totalProductPrice = document.getElementById(
+      `totalProductPrice_${id}`
+    );
+
+    // Update the quantity displayed in the <span> element
+    if (quantitySpan) {
+      quantitySpan.innerText = data.quantity;
+      totalProductPrice.innerText = data.productTotal.toFixed(2);
+    }
+  }
+
+  function managePlusButton(data) {
+    const plusBtnDisabled = document.getElementById("plusBtnDisabled");
+    const plusBtn = document.getElementById("plusBtn");
+
+    if (data.status === "warning") {
+      plusBtnDisabled.style.pointerEvents = "all";
+    }
+  }
+
+  function updateCartTotal(data) {
+    const subTotal = document.getElementById("subtotal");
+    const cartTotal = document.getElementById("cart-total");
+    subTotal.innerText = data.subtotal;
+    cartTotal.innerText = data.total;
+  }
+
+  function updateQuantity(id, isIncrement) {
+    const action = isIncrement ? "inc" : "dec";
+    const url = `/cart/${action}/${id}`;
+
+    fetch(url, {
+      method: "GET",
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          console.error("Failed");
+        }
+      })
+      .then((responseData) => {
+        if (responseData) {
+          data = responseData;
+
+          if (data.quantity <= 0) {
+            location.reload();
+          }
+
+          updateCartMessage(data);
+
+          updateCartCount(data);
+
+          updateQuantityDisplay(id, data);
+
+          updateCartTotal(data);
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+      });
+  }
+
+  const plusButtons = document.querySelectorAll(".plusBtn");
+  const minusButtons = document.querySelectorAll(".minusBtn");
+
+  plusButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const productId = this.getAttribute("data-product-id");
+      updateQuantity(productId, true);
+    });
+  });
+
+  minusButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const productId = this.getAttribute("data-product-id");
+      updateQuantity(productId, false);
+    });
+  });
+</script>
