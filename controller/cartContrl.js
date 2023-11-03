@@ -108,7 +108,7 @@ const addToCart = asyncHandler(async (req, res) => {
         }
         
 
-         res.json({ message: "Product Added to Cart", count: cart.products.length, status: "success" });
+        //  res.json({ message: "Product Added to Cart", count: cart.products.length, status: "success" });
 
     } catch (error) {
         throw new Error(error);

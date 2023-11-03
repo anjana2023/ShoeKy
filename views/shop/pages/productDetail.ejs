@@ -15,6 +15,7 @@
         </div>
     </div>
 </div>
+
 <div class="product-details ptb-100 pb-90">
     <div class="container">
         <div class="row">
@@ -67,14 +68,13 @@
                     </h3>
                     <div class="rating-number">
                         <div class="quick-view-rating">
-                            <i class="pe-7s-star p-star"></i>
-                            <i class="pe-7s-star red-star"></i>
-                            <i class="pe-7s-star"></i>
-                            <i class="pe-7s-star"></i>
-                            <i class="pe-7s-star"></i>
+                            <div class="quick-view-rating d-flex justify-content-between">
+                                <img src="/assets/img/instra/star.svg" style="height: 40px; width: 40px" alt="star" />
+                                <span class="text-secondary"><%= `(${avgRating})` %></span>
+                            </div>
                         </div>
                         <div class="quick-view-number">
-                            <span>2 Rating's</span>
+                            <span><%= reviews.length %> Ratings</span>
                         </div>
                     </div>
                     <span class="text-decoration-line-through">
@@ -105,11 +105,9 @@
                             <% if (!user) { %>
                                 <a class="btn-hover list-btn-style" href="/login">Add to
                                     Cart</a>
-                                <% }else { %>
-                                    <% if (cartProductIds.includes(product._id.toString())) { %>
-                                        <a class="btn-hover list-btn-style" href="/cart">Go Cart
-                                        </a>
-                                        <% } else if (product.quantity> 0) { %>
+                                
+                                    
+                                        <% } else if(product.quantity> 0) { %>
                                             <a class="btn-hover list-btn-style"
                                                 href="/add/<%= product._id %>">Add
                                                 to
@@ -117,7 +115,7 @@
                                             <% } else { %>
                                                 <h3>Out of Stock</h3>
                                                 <% } %>
-                                                    <% } %>
+                                                  
 
                         </div>
 
@@ -206,7 +204,25 @@
                         <% }); %>
                 </div>
                 <div class="tab-pane fade" id="pro-review" role="tabpanel">
-                    <a href="#">Be the first to write your review!</a>
+                    <% if (!reviews && reviews.length) { %>
+                    <p class="text-dark">No reviews</p>
+                    <% } else { %>
+                    <div class="testimonials-area bg-img" style="background-image: url(/assets/img/instra/nyk20bg.jpg)">
+                        <div class="container">
+                            <div class="testimonials-active owl-carousel">
+                                <% reviews.forEach(review => { %>
+                                <div class="single-testimonial-2 text-center">
+                                    <img style="width: 100px; height: 100px;" class="rounded-circle" src="<%=
+                                    review?.user?.image || "/assets/img/instra/user.png" %>" alt="user" />
+                                    <p><%= review.review %></p>
+                                    <h4>Posted By <%= review?.user?.firstName %></h4>
+                                    <span><%= review.rating %> Stars </span>
+                                </div>
+                                <% }) %>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
                 </div>
             </div>
         </div>

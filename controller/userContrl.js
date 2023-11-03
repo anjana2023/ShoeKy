@@ -264,17 +264,17 @@ const categoryPage = async (req, res) => {
         const categoryId = req.query.id;//get the category from the body
         const page = req.query.p || 1; // Get the current page from the query parameters
         const limit = 3;
-        let wishlist;
+        let userWishlist;
        
         if (user) {
             if ( user.wishlist) {
                 
-                wishlist = user.wishlist;
+                userWishlist = user.wishlist;
              }
 
         } else {
             
-            Wishlist = false;
+            userWishlist = false;
         }
         async function getCategoryNameById(categoryId) {
             try {
@@ -312,7 +312,7 @@ console.log(categoryName)
         res.render('./shop/pages/categoryShop', {
             products: prdtdetails,
             category: listedCategories,
-            user,wishlist,
+            user,userWishlist,
             categoryname:categoryName,
             currentPage: page,
             category_id: categoryId,
@@ -335,11 +335,31 @@ const viewProduct = asyncHandler(async (req, res) => {
     try {
         const id = req.params.id
         const user = req.user
+       
         const findProduct = await Product.findOne({ _id: id }).populate('categoryName').populate('images')
+        const reviews = await Review.find({ product: id }).populate("user");
+
+
+        let totalRating = 0;
+        let avgRating = 0;
+
+        if (reviews.length > 0) {
+            for (const review of reviews) {
+                totalRating += Math.ceil(parseFloat(review.rating));
+            }
+            const averageRating = totalRating / reviews.length;
+            avgRating = averageRating.toFixed(2);
+
+        } else {
+            avgRating = 0;
+        }
+
         if (!findProduct) {
             return res.status(404).render('./shop/pages/page404')
         }
+
         const products = await Product.find({ isListed: true }).populate('images').limit(3)
+
         let cartProductIds;
         if (user) {
          cartProductIds = user.cart.map(cartItem => cartItem.product.toString());
@@ -347,12 +367,15 @@ const viewProduct = asyncHandler(async (req, res) => {
             cartProductIds = null;
 
         }
+
         let wishlist = false
         if (user) {
             wishlist = user.wishlist;
         }
-        res.render('./shop/pages/productDetail', { product: findProduct, products: products ,cartProductIds, wishlist})
-    } catch (error) {
+        res.render('./shop/pages/productDetail', { product: findProduct, products: products ,cartProductIds, wishlist, reviews,
+            avgRating,})
+    } 
+    catch (error) {
         throw new Error(error)
     }
 })
@@ -380,30 +403,31 @@ const aboutUs = asyncHandler(async (req, res) => {
 
 
 
-// const addReview = asyncHandler(async (req, res) => {
-//     try {
-//         const productId = req.params.id;
-//         const userId = req.user._id;
+const addReview = asyncHandler(async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const userId = req.user._id;
 
-//         const existingReview = await Review.findOne({ user: userId, product: productId });
+        const existingReview = await Review.findOne({ user: userId, product: productId });
 
-//         if (existingReview) {
-//             existingReview.review = req.body.review;
-//             existingReview.rating = req.body.rating;
-//             await existingReview.save();
-//         } else {
-//             const newReview = await Review.create({
-//                 user: userId,
-//                 product: productId,
-//                 review: req.body.review,
-//                 rating: req.body.rating,
-//             });
-//         }
-//         res.redirect("back");
-//     } catch (error) {
-//         throw new Error(error);
-//     }
-// });
+        if (existingReview) {
+            existingReview.review = req.body.review;
+            existingReview.rating = req.body.rating;
+            console.log(req.body.rating)
+            await existingReview.save();
+        } else {
+            const newReview = await Review.create({
+                user: userId,
+                product: productId,
+                review: req.body.review,
+                rating: req.body.rating,
+            });
+        }
+        res.redirect("back");
+    } catch (error) {
+        throw new Error(error);
+    }
+});
 
 
 
@@ -541,7 +565,7 @@ module.exports = {
     aboutUs,
     categoryPage,
     walletTransactionspage,
-    // addReview,
+    addReview,
     search,
     removeItemfromWishlist,
     addTowishlist,

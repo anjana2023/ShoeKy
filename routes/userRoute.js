@@ -71,7 +71,7 @@ userRoute.get('/wishlist', ensureAuthenticated, userController.wishlist);
 userRoute.get('/addTo-wishlist/:id',  ensureAuthenticated, userController.addTowishlist);
 userRoute.get('/removeWishlist/:id', ensureAuthenticated, userController.removeItemfromWishlist);
 
-
+userRoute.post("/review/add/:id", userController.addReview);
 
 
 //search 

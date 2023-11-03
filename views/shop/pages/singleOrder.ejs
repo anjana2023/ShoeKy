@@ -104,8 +104,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h3 style="color: #fff;">Write a Review</h3>
-                                <form action="/user/review/add/<%= order.product._id %>" method="post">
-                                    <!-- Review Rating -->
+                                <form action="/review/add/<%= order.product._id %>" method="post">
+                                  
                                     <div class="form-group">
                                         <label for="rating" style="color: #fff;">Rating:</label>
                                         <select class="form-control" id="rating" name="rating" style="background-color: #333; color: #fff;">
@@ -117,14 +117,14 @@
                                                 <option value="1" <% if (review?.rating==="1") { %>selected<% } %>>1 stars</option>
                                             </select>
                                     </div>
-                                    <!-- Review Text -->
+                                  
                                     <div class="form-group">
                                         <label for="reviewText" style="color: #fff;">Review:</label>
                                         <textarea class="form-control" id="reviewText" name="review" rows="4" style="background-color: #333; color: #fff;">
-<%= review?.review %></textarea
-                                        >
+                                      <%= review?.review %></textarea>
+                                        
                                     </div>
-                                    <!-- Submit Button -->
+                                   
                                     <button type="submit" class="btn btn-primary h-auto" style="background-color: #000; color: #fff;">
                                         <%= review.length ? "Update Review" : "Submit Review" %>
                                     </button>
@@ -132,7 +132,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Review End -->
+                   
                     <% } %>
                 </div>
             </div>
@@ -190,7 +190,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="reason" style="color: #fff;">Reason for Return</label>
+                        <label for="reason" style="color: #0a0606;">Reason for Return</label>
                         <select class="form-control" id="reason" name="reason" required style="background-color: #333; color: #fff;">
                             <option value="" disabled selected>Select a reason</option>
                             <option value="item_description_mismatch">Item doesn't match the description</option>
