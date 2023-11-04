@@ -105,18 +105,13 @@
                             <% if (!user) { %>
                                 <a class="btn-hover list-btn-style" href="/login">Add to
                                     Cart</a>
+                                <% }else { %>
+                            
+                                    <a class="btn-hover list-btn-style"  title="Add To Cart" onclick="addToCart(`<%= product._id %>`)">Add
+                                        to
+                                        Cart</a>
                                 
-                                    
-                                        <% } else if(product.quantity> 0) { %>
-                                            <a class="btn-hover list-btn-style"
-                                                href="/add/<%= product._id %>">Add
-                                                to
-                                                Cart</a>
-                                            <% } else { %>
-                                                <h3>Out of Stock</h3>
-                                                <% } %>
-                                                  
-
+                                        <% } %>
                         </div>
 
                         <div class="quickview-btn-wishlist">
@@ -179,7 +174,7 @@
                     Description
                 </a>
                 <a href="#pro-review" data-bs-toggle="tab" role="tab" aria-selected="false">
-                    Reviews (0)
+                    Reviews
                 </a>
             </div>
             <div class="description-review-text tab-content">
@@ -204,7 +199,7 @@
                         <% }); %>
                 </div>
                 <div class="tab-pane fade" id="pro-review" role="tabpanel">
-                    <% if (!reviews && reviews.length) { %>
+                    <% if ( reviews.length <1) { %>
                     <p class="text-dark">No reviews</p>
                     <% } else { %>
                     <div class="testimonials-area bg-img" style="background-image: url(/assets/img/instra/nyk20bg.jpg)">
@@ -215,7 +210,7 @@
                                     <img style="width: 100px; height: 100px;" class="rounded-circle" src="<%=
                                     review?.user?.image || "/assets/img/instra/user.png" %>" alt="user" />
                                     <p><%= review.review %></p>
-                                    <h4>Posted By <%= review?.user?.firstName %></h4>
+                                    <h4>Posted By <%= review?.user?.userName %></h4>
                                     <span><%= review.rating %> Stars </span>
                                 </div>
                                 <% }) %>
@@ -310,3 +305,5 @@
     }
 </style>
 <script src="/assets/js/shop/wishlist.js"></script>
+
+<script src="/assets/js/shop/cart.js"></script>

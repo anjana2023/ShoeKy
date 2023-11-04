@@ -73,15 +73,10 @@ adminRoute.post("/coupon/add", adminController.createCoupon);
 adminRoute.post("/coupon/edit/:id", adminController.updateCoupon);
 
 
-adminRoute.get("/customers", customerController.customerpage);
-adminRoute.get("/customers/view/:id", customerController.viewCustomer);
-adminRoute.put("/customers/block/:id", customerController.blockCustomer);
-adminRoute.put("/customers/unblock/:id", customerController.unblockCustomer);
-adminRoute.put("/customers/update-role/:id", customerController.updateRole);
 
-
-
-
+adminRoute.get("/sales-report", adminController.salesReportpage);
+adminRoute.get("/sales-data", adminController.getSalesData)
+adminRoute.get("/get/sales-report", adminController.generateSalesReport);
 
 adminRoute.get('*', (req, res) => { res.render('./admin/page404', { title: 'Error' }) })
 

@@ -80,7 +80,7 @@ userRoute.post('/shop/search', userController.search);
 
 // cart_section-- 
 userRoute.get('/cart', ensureAuthenticated, cartController.cartpage);
-userRoute.get('/add/:id', ensureAuthenticated, cartController.addToCart);
+userRoute.get('/cart/add/:id', ensureAuthenticated, cartController.addToCart);
 userRoute.get('/remove/:id', ensureAuthenticated, cartController.removeFromCart);
 
 userRoute.get('/cart/inc/:id',ensureAuthenticated, cartController.incQuantity);

@@ -395,129 +395,88 @@ const updateCoupon = expressHandler(async (req, res) => {
 });
 
 
+
+
+
+
+const salesReportpage = expressHandler(async (req, res) => {
+    try {
+        res.render("admin/pages/sales", { title: "Sales Report" });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
 /**
- * Customers Page Route
+ * Generate Sales Report
+ * Method POST
+ */
+const generateSalesReport = async (req, res, next) => {
+    try {
+        const fromDate = new Date(req.query.fromDate);
+        const toDate = new Date(req.query.toDate);
+        const salesData = await Order.find({
+            orderedDate: {
+                $gte: fromDate,
+                $lte: toDate,
+            },
+        }).select("orderId totalPrice orderedDate payment_method -_id");
+
+        res.status(200).json(salesData);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+};
+
+/**
+ * Get Sales Data
  * Method GET
  */
-const customerpage = expressHandler(async (req, res) => {
+const getSalesData = async (req, res) => {
     try {
-        const messages = req.flash();
-        const customers = await User.find({ role: roles.user });
-        res.render("admin/pages/customers", { title: "Customer", customers, messages, roles });
-    } catch (error) {
-        throw new Error(error);
-    }
-});
-
-/**
- * View a Customer Page Route
- * Method GET
- */
-const viewCustomer = expressHandler(async (req, res) => {
-    try {
-        const messages = req.flash();
-        const id = req.params.id;
-        validateMongoDbId(id);
-        const customer = await User.findById(id);
-        res.render("admin/pages/ccustomer", { title: "Customer", customer, messages });
-    } catch (error) {
-        throw new Error(error);
-    }
-});
-
-/**
- * Block Customer
- * Method PUT
- */
-const blockCustomer = expressHandler(async (req, res) => {
-    const id = req.params.id;
-    validateMongoDbId(id);
-    try {
-        const blockedCustomer = await User.findByIdAndUpdate(
-            id,
+        const pipeline = [
             {
-                isBlocked: true,
-            },
-            {
-                new: true,
-            }
-        );
-        if (blockedCustomer) {
-            req.flash("success", `${blockedCustomer.email} Blocked Successfully`);
-            res.redirect("/admin/customers");
-        } else {
-            req.flash("danger", `Can't block ${blockedCustomer}`);
-            res.redirect("/admin/customers");
-        }
-    } catch (error) {
-        throw new Error(error);
-    }
-});
-
-/**
- * Unblock Customer
- * Method PUT
- */
-const unblockCustomer = expressHandler(async (req, res) => {
-    const id = req.params.id;
-    validateMongoDbId(id);
-    try {
-        const unblockCustomer = await User.findByIdAndUpdate(
-            id,
-            {
-                isBlocked: false,
-            },
-            {
-                new: true,
-            }
-        );
-        if (unblockCustomer) {
-            req.flash("success", `${unblockCustomer.email} Unblocked Successfully`);
-            res.redirect("/admin/customers");
-        } else {
-            req.flash("danger", `Can't Unblock ${unblockCustomer}`);
-            res.redirect("/admin/customers");
-        }
-    } catch (error) {
-        throw new Error(error);
-    }
-});
-
-/**
- * Update Role
- * Method PUT
- */
-const updateRole = expressHandler(async (req, res) => {
-    const id = req.params.id;
-    validateMongoDbId(id);
-    try {
-        if (req.user.role === roles.admin && req.body.role === roles.superAdmin) {
-            req.flash("warning", "unauthorized, admin can't update user role to super admin");
-            res.redirect("/admin/customers");
-        } else {
-            const updatedCustomer = await User.findByIdAndUpdate(
-                id,
-                {
-                    role: req.body.role,
+                $project: {
+                    year: { $year: "$orderedDate" },
+                    month: { $month: "$orderedDate" },
+                    totalPrice: 1,
                 },
-                {
-                    new: true,
-                }
-            );
-            if (updatedCustomer) {
-                req.flash("success", `${updatedCustomer.firstName} updated to ${updatedCustomer.role}`);
-                res.redirect("/admin/customers");
-            } else {
-                req.flash("danger", `Can't Update the role`);
-            }
-        }
+            },
+            {
+                $group: {
+                    _id: { year: "$year", month: "$month" },
+                    totalSales: { $sum: "$totalPrice" },
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    month: {
+                        $concat: [
+                            { $toString: "$_id.year" },
+                            "-",
+                            {
+                                $cond: {
+                                    if: { $lt: ["$_id.month", 10] },
+                                    then: { $concat: ["0", { $toString: "$_id.month" }] },
+                                    else: { $toString: "$_id.month" },
+                                },
+                            },
+                        ],
+                    },
+                    sales: "$totalSales",
+                },
+            },
+        ];
+
+        const monthlySalesArray = await Order.aggregate(pipeline);
+
+        res.json(monthlySalesArray);
     } catch (error) {
-        throw new Error(error);
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
-});
-
-
-
+};
 
 
 module.exports = {
@@ -538,10 +497,8 @@ module.exports = {
     createCoupon,
     editCouponPage,
     updateCoupon,
-    customerpage,
-    updateRole,
-    unblockCustomer,
-    blockCustomer,
-    viewCustomer,
-    customerpage
+    getSalesData,
+    salesReportpage,
+    generateSalesReport
+    
 }
