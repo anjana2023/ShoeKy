@@ -1,6 +1,6 @@
 <div class="container ">
     <h2 mt-2>Edit Product</h2>
-    <% include('../partials/flash.ejs') %>
+    <% include('../partials/flash-message.ejs') %>
         <form action="/admin/product/editProduct/<%= product._id %>" method="post"
             onsubmit="return validateProductForm()">
             <div class="card">

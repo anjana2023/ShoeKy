@@ -22,7 +22,8 @@ adminRoute.post('/', adminController.verifyAdmin);
 adminRoute.get('/logout', isAdminLoggedIn, adminController.logout)
 
 // adminController.userManagement---
-adminRoute.get('/dashboard', isAdminLoggedIn, adminController.loadDashboard)
+// adminRoute.get('/dashboard', isAdminLoggedIn, adminController.loadDashboard)
+adminRoute.get("/dashboard", adminController.dashboardpage);
 adminRoute.get('/user', isAdminLoggedIn, adminController.userManagement)
 adminRoute.post('/user/search', isAdminLoggedIn, adminController.searchUser)
 adminRoute.post('/user/blockUser/:id', adminValidateID, isAdminLoggedIn, adminController.blockUser)

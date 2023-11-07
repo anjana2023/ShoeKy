@@ -8,13 +8,13 @@ const { sendOtp, generateOTP } = require('../utility/nodeMailer')
 const crypto = require('crypto')
 const bcrypt = require('bcrypt')
 const Review = require("../models/reviewModel");
-
+const WalletTransaction=require('../models/walletTransactionModel')
 
 
 // loadLandingPage---
 const loadLandingPage = asyncHandler(async (req, res) => {
     try {
-        const products = await Product.find({ isListed: true }).populate('images').limit(3)
+        const products = await Product.find({ isListed: true }).populate('images')
         console.log("home page")
         res.render('./shop/pages/index',{products:products})
     } catch (error) {
@@ -193,14 +193,16 @@ const userLogout = async (req, res) => {
 }
 
 // userProfile---
-const userProfile = asyncHandler(async (req, res) => {
+const userProfile = async (req, res) => {
     try {
         const user = req.user;
-        res.render('./shop/pages/profile', { user })
+        console.log(user);
+        const wallet = await Wallet.findOne({ user: user._id });
+        res.render('./shop/pages/profile',{user,wallet})
     } catch (error) {
-        throw new Error(error);
-    }
-});
+        console.log(error.message);
+    }
+}
 
 
 
@@ -336,7 +338,7 @@ const viewProduct = asyncHandler(async (req, res) => {
         const id = req.params.id
         const user = req.user
        
-        const findProduct = await Product.findOne({ _id: id }).populate('categoryName').populate('images')
+        const findProduct = await Product.findOne({ _id: id }).populate('categoryName').populate('images').exec()
         const reviews = await Review.find({ product: id }).populate("user");
 
 
@@ -435,7 +437,7 @@ const walletTransactionspage = asyncHandler(async (req, res) => {
     try {
         const walletId = req.params.id;
         const walletTransactions = await WalletTransaction.find({ wallet: walletId }).sort({ timestamp: -1 });
-        res.render("shop/pages/walletTransactions", {
+        res.render("shop/pages/walletTransaction", {
             title: "Wallet Transactions",
             page: "Wallet-Transactions",
             walletTransactions,
@@ -507,7 +509,7 @@ const wishlist = asyncHandler(async (req, res) => {
             },
         });
         console.log('dsfs', userWishlist.wishlist);
-        res.render('./shop/pages/wishlist', { wishlist: userWishlist.wishlist })
+        res.render('./shop/pages/wishlist', { wishlist: userWishlist.wishlist ,})
     } catch (error) {
         throw new Error(error)
     }
@@ -547,6 +549,7 @@ const removeItemfromWishlist = asyncHandler(async (req, res) => {
 
 
 
+
 module.exports = {
     loadLandingPage,
     loadRegister,
@@ -560,7 +563,6 @@ module.exports = {
     userProfile,
     shopping,
     viewProduct,
-  
     contact,
     aboutUs,
     categoryPage,

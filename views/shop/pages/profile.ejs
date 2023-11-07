@@ -30,10 +30,12 @@
       </div>
       <div class="col-md-3">
         <div class="card shadow">
-          <a href="/wishlist" class="text-decoration-none text-center p-4 d-block">
-            <i class="far fa-heart fa-3x text-danger mb-3"></i>
-            <h3 class="h4 fw-bold">Wishlist</h3>
-            <p class="text-muted">Check your Wishlist</p>
+
+  
+          <a href="/wallet/<%= wallet?._id %>" class="text-decoration-none text-center p-4 d-block">
+            <i class="pe-7s-wallet fa-3x text-danger mb-3"></i>
+            <h3 class="h4 fw-bold">Wallet</h3>
+            <p class="text-muted"> ₹ <%= wallet?.balance ? wallet.balance.toFixed(2) : "0" %></p>
           </a>
         </div>
       </div>

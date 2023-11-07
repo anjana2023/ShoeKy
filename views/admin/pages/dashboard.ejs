@@ -1,0 +1,167 @@
+
+
+<%- include('../partials/flash-message.ejs') %>
+
+
+
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <div class="card text-white" style="background-color: rgba(222, 230, 222, 0.333);">
+            <div class="card-body">
+                <h5 class="card-title text-dark">Total Sales</h5>
+                <p class="card-text text-dark">
+                    Total Sales Amount: <br />
+                    <span class="text-whit h3">₹ <%= totalSalesAmount %></span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-white" style="background-color:  rgba(222, 230, 222, 0.333);">
+            <div class="card-body">
+                <h5 class="card-title text-dark">Total Products Sold</h5>
+                <p class="card-text text-dark">
+                    Sold Count: <br />
+                    <span class="text-whit h3"><%= totalSoldProducts %></span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-white" style="background-color: rgba(222, 230, 222, 0.333);">
+            <div class="card-body">
+                <h5 class="card-title text-dark">Users</h5>
+                <p class="card-text text-dark">
+                    Users Count: <br />
+                    <span class="text-whit h3"><%= totalActiveUserCount %></span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-dark" style="background-color:  rgba(222, 230, 222, 0.333);">
+            <div class="card-body">
+                <h5 class="card-title text-dark">Total Orders</h5>
+                <p class="card-text text-dark">
+                    Total Orders Count: <br />
+                    <span class="text-whit h3"><%= totalOrderCount %></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  Row 1 -->
+<div class="row">
+    <!-- Graph -->
+    <div class="col-lg-8">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card mb-4">
+                <article class="card-body ">
+                    <h5 class="card-title">Sale statistics</h5>
+                    <canvas id="saleChart" height="120px"></canvas>
+                </article>
+            </div>
+        </div>
+    </div>
+    <!-- Graph End -->
+    <div class="col-lg-4 d-flex align-items-stretch">
+        <div class="card w-100">
+            <div class="card-body p-4">
+                <div class="mb-4 d-flex justify-content-between">
+                    <h5 class="mb-0">Recent Sales</h5>
+                    <a href="/admin/orders" class="">View All</a>
+                </div>
+                <div class="card-body">
+                    <% recentOrders.forEach(order => { %>
+                    <div class="media mb-3">
+                        <img
+                            src="<%= order?.user?.image || '/admin/images/profile/user-1.jpg' %>"
+                            class="mr-3 rounded-circle"
+                            alt="User Image"
+                            style="width: 60px"
+                        />
+                        <div class="media-body">
+                            <h5 class="mt-0"><%= order?.user?.firstName %></h5>
+                            <small>
+                                <% var orderedMoment = moment(order.orderedDate); var now = moment(); if
+                                (now.diff(orderedMoment, 'minutes') < 1) { %> Just now <% } else { %> <%=
+                                orderedMoment.fromNow() %> <% } %>
+                            </small>
+                        </div>
+                        <p class="mb-0 text-success">₹ <%= order?.totalPrice?.toFixed(2) %></p>
+                    </div>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if ($("#saleChart").length) {
+            var saleCtx = document.getElementById("saleChart").getContext("2d");
+            var saleChart;
+
+            // Function to generate labels for the chart
+            function generateLabels() {
+                var currentMonth = new Date().getMonth(); // Get the current month (0-11)
+                var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                var labels = [];
+
+                for (var i = 0; i < 12; i++) {
+                    labels.push(monthNames[(currentMonth + i) % 12]);
+                }
+
+                return labels;
+            }
+
+            // Function to update the chart data
+            function updateChart(salesData) {
+                if (saleChart) {
+                    saleChart.destroy(); // Destroy the existing chart if it exists
+                }
+
+                var chartLabels = salesData.map((item) => item.month); // Extract month labels from salesData
+                var salesValues = salesData.map((item) => item.sales); // Extract sales values from salesData
+
+                saleChart = new Chart(saleCtx, {
+                    type: "line",
+                    data: {
+                        labels: chartLabels,
+                        datasets: [
+                            {
+                                label: "Sales",
+                                tension: 0.3,
+                                fill: true,
+                                backgroundColor: "rgba(44, 120, 220, 0.2)",
+                                borderColor: "rgba(44, 120, 220)",
+                                data: salesValues,
+                            },
+                        ],
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    usePointStyle: true,
+                                },
+                            },
+                        },
+                    },
+                });
+            }
+
+            // Fetch data from the endpoint
+            fetch("/admin/sales-data")
+                .then((response) => response.json())
+                .then((data) => {
+                    updateChart(data); // Assuming the response has "sales" and "users" properties
+                })
+                .catch((error) => {
+                    console.error("Error fetching data:", error);
+                });
+        }
+    });
+</script>
