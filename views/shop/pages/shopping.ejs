@@ -25,7 +25,7 @@
                     <div class="sidebar-widget mb-50">
                         <h3 class="sidebar-title">Search Products</h3>
                         <div class="sidebar-search">
-                            <form action="/shop/search" method="post">
+                            <form >
                                 <input placeholder="Search Products..." type="text" id="search" name="search">
                                 <button><i class="ti-search"></i></button>
                             </form>
@@ -33,42 +33,42 @@
                     </div>
 
 
-                    <div class="sidebar-widget mb-40">
-                        <h3 class="sidebar-title">Filter by Price</h3>
-                        <div class="price_filter">
-                            <div id="slider-range"></div>
-                            <div class="price_slider_amount">
-                                <div class="label-input">
-                                    <label>price : </label>
-                                    <input type="text" id="amount" name="price" placeholder="Add Your Price" />
-                                </div>
-                                <button type="button">Filter</button>
-                            </div>
-                        </div>
-                    </div>
+          <div class="sidebar-widget mb-20">
+            <h3 class="sidebar-title">Filter by Price</h3>
+            <div class="sidebar-categories">
+                <ul>
+                    <li><a href="/shop">
+                            Default
+                        </a></li>
+                    <li><a href="" id="lowToHigh">
+                            Low to High
+                        </a></li>
+                    <li><a href="" id="highToLow">
+                            High to low
+                        </a></li>
+                </ul>
+            </div>
+        </div>
                     <% if (products.length> 0) { %>
 
                         <div class="sidebar-widget mb-45">
                             <h3 class="sidebar-title">Categories</h3>
                             <div class="sidebar-categories">
                                 <ul>
-                                    <% if (category.length>0) { %>
-
-
+                                    <% if (category.length>0) { %>  
                                         <% category.forEach(element=> { %>
-
-                                            <li><a href="/categoryShop?id=<%= element._id %>">
+                                            <li><a href="/shop?p=<%= currentPage %>&category=<%= element.categoryName %>"
+                                                    <% if (selectedCategory && selectedCategory.length>0) { %>
+                                                        class="<%= selectedCategory.includes(element._id) ? 'text-dark' : '' %>"
+                                                 <% } %>>
                                                     <%= element.categoryName %>
                                                 </a></li>
-
                                             <% }); %>
-
+    
                                                 <% } else { %>
                                                     <h3>NO CATEGORIES</h3>
                                                     <% } %>
-
                                 </ul>
-
                             </div>
                         </div>
                         <% } %>
@@ -171,9 +171,25 @@
                                                                 </a></h4>
 
                                                                
-                                                            <span class="text-decoration-line-through">
-                                                                ₹<%= (element.productPrice).toLocaleString() %></span>
+                                                                <span class="text-decoration-line-through">
+                                                                <% if (element.productPrice !==element.salePrice) { %>
+                                                                    ₹<%= element.productPrice %>
+                                                                        <% } %>
+                                                            </span>
                                                             <span>₹<%= (element.salePrice).toLocaleString() %></span>
+                                                            <ul class="list-unstyled">
+                                                                <li class="d-inline-block"><label>Category:</label></li>
+                                                                <li class="d-inline-block">
+                                                                    <%= element.categoryName.categoryName%>
+                                                                </li>
+                                                                <% if (element.productPrice !==element.salePrice) { %>
+                                                                    <li class="d-inline-block text-success ">
+                                                                        <strong>
+                                                                            <%= element.categoryName.description %>
+                                                                        </strong>
+                                                                    </li>
+                                                                    <% } %>
+                                                            </ul>
                                                         </div>
                                                        
                                                 </div>

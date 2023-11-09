@@ -23,7 +23,8 @@ adminRoute.get('/logout', isAdminLoggedIn, adminController.logout)
 
 // adminController.userManagement---
 // adminRoute.get('/dashboard', isAdminLoggedIn, adminController.loadDashboard)
-adminRoute.get("/dashboard", adminController.dashboardpage);
+adminRoute.get("/dashboard",isAdminLoggedIn, adminController.dashboardpage);
+
 adminRoute.get('/user', isAdminLoggedIn, adminController.userManagement)
 adminRoute.post('/user/search', isAdminLoggedIn, adminController.searchUser)
 adminRoute.post('/user/blockUser/:id', adminValidateID, isAdminLoggedIn, adminController.blockUser)
@@ -57,27 +58,27 @@ adminRoute.delete('/product/delete-image/:id',adminValidateID, productController
 // OrderManagement--
 
 
-adminRoute.get("/orders", adminController.ordersPage);
-adminRoute.get("/orders/:id", adminController.editOrder);
-adminRoute.put("/orders/update/:id", adminController.updateOrderStatuss);
-adminRoute.post("/orders/search", adminController.searchOrder);
+adminRoute.get("/orders",isAdminLoggedIn, adminController.ordersPage);
+adminRoute.get("/orders/:id",adminValidateID, isAdminLoggedIn,adminController.editOrder);
+adminRoute.put("/orders/update/:id",adminValidateID, isAdminLoggedIn,adminController.updateOrderStatuss);
+adminRoute.post("/orders/search", adminValidateID,isAdminLoggedIn,adminController.searchOrder);
 
 
 
 // Coupon Management---
 
-adminRoute.get("/coupons", adminController.couponspage);
-adminRoute.get("/coupon/add", adminController.addCoupon);
-adminRoute.get("/coupon/edit/:id", adminController.editCouponPage);
+adminRoute.get("/coupons", isAdminLoggedIn,adminController.couponspage);
+adminRoute.get("/coupon/add", isAdminLoggedIn,adminController.addCoupon);
+adminRoute.get("/coupon/edit/:id",adminValidateID,isAdminLoggedIn, adminController.editCouponPage);
 
-adminRoute.post("/coupon/add", adminController.createCoupon);
-adminRoute.post("/coupon/edit/:id", adminController.updateCoupon);
+adminRoute.post("/coupon/add", isAdminLoggedIn,adminController.createCoupon);
+adminRoute.post("/coupon/edit/:id",adminValidateID, isAdminLoggedIn,adminController.updateCoupon);
 
 
 
-adminRoute.get("/sales-report", adminController.salesReportpage);
-adminRoute.get("/sales-data", adminController.getSalesData)
-adminRoute.get("/get/sales-report", adminController.generateSalesReport);
+adminRoute.get("/sales-report",isAdminLoggedIn, adminController.salesReportpage);
+adminRoute.get("/sales-data", isAdminLoggedIn,adminController.getSalesData)
+adminRoute.get("/get/sales-report", isAdminLoggedIn,adminController.generateSalesReport);
 
 adminRoute.get('*', (req, res) => { res.render('./admin/page404', { title: 'Error' }) })
 

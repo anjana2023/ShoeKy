@@ -5,8 +5,9 @@ const expressHandler = require('express-async-handler')
 // category page-- 
 const categoryManagement = expressHandler(async (req, res) => {
     try {
+        const messages = req.flash();
         const findCategory = await category.find()
-        res.render('./admin/pages/categories', { catList: findCategory, title: 'Categories' })
+        res.render('./admin/pages/categories', { catList: findCategory, title: 'Categories',messages  })
     } catch (error) {
         throw new Error(error)
     }
@@ -15,7 +16,8 @@ const categoryManagement = expressHandler(async (req, res) => {
 // addCategory form---
 const addCategory = expressHandler(async (req, res) => {
     try {
-        res.render('./admin/pages/addCategory', { title: 'addCategory' })
+        const messages = req.flash();
+        res.render('./admin/pages/addCategory', { title: 'addCategory',messages })
     } catch (error) {
         throw new Error(error)
     }
@@ -24,10 +26,10 @@ const addCategory = expressHandler(async (req, res) => {
 // inserting  categories--
 const insertCategory = expressHandler(async (req, res) => {
     try {
-
+        const messages = req.flash();
         const categoryName = req.body.addCategory;
         const regexCategoryName = new RegExp(`^${categoryName}$`, 'i');
-        const findCat = await category.findOne({ categoryName: regexCategoryName });
+        const findCat = await category.findOne({ categoryName: regexCategoryName ,messages});
 
         if (findCat) {
             const catCheck = `Category ${categoryName} Already existing`;
@@ -82,6 +84,54 @@ const unList = expressHandler(async (req, res) => {
 
 })
 
+// // edit Category form --
+// const editCategory = expressHandler(async (req, res) => {
+
+//     try {
+//         const { id } = req.params
+//         const catName = await category.findById(id);
+//         if (catName) {
+//             res.render('./admin/pages/editCategory', { title: 'editCategory', values: catName });
+//         } else {
+//             console.log('error in rendering');
+//         }
+//     } catch (error) {
+//         throw new Error(error)
+//     }
+// })
+
+// // update Category name --
+// const updateCategory = expressHandler(async (req, res) => {
+//     try {
+//         const id = req.params.id
+//         const updatedName = req.body.updatedName
+//         console.log(updatedName);
+//         await category.findByIdAndUpdate(id, { $set: { categoryName: updatedName } })
+//         res.redirect('/admin/category')
+//     } catch (error) {
+//         throw new Error(error)
+//     }
+// })
+
+// searchcCategory----
+const searchCategory = expressHandler(async (req, res) => {
+    console.log(req.body.search);
+    try {
+        const data = req.body.search
+        const searching = await category.find({ categoryName: { $regex: data, $options: 'i' } });
+        if (searching) {
+            res.render('./admin/pages/categories', { title: 'Searching', catList: searching })
+
+        } else {
+            res.render('./admin/pages/categories', { title: 'Searching' })
+        }
+
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
+
 // edit Category form --
 const editCategory = expressHandler(async (req, res) => {
 
@@ -98,32 +148,19 @@ const editCategory = expressHandler(async (req, res) => {
     }
 })
 
-// update Category name --
+// update Category name and add offer if there is any--
 const updateCategory = expressHandler(async (req, res) => {
     try {
         const id = req.params.id
-        const updatedName = req.body.updatedName
-        console.log(updatedName);
-        await category.findByIdAndUpdate(id, { $set: { categoryName: updatedName } })
+        const { updatedName, offer, description, startDate, endDate, } = req.body
+        const cat = await category.findById(id)
+        cat.categoryName = updatedName;
+        cat.offer = offer;
+        cat.description = description;
+        cat.startDate = startDate;
+        cat.endDate = endDate
+        const saved = await cat.save()
         res.redirect('/admin/category')
-    } catch (error) {
-        throw new Error(error)
-    }
-})
-
-// searchcCategory----
-const searchCategory = expressHandler(async (req, res) => {
-    console.log(req.body.search);
-    try {
-        const data = req.body.search
-        const searching = await category.find({ categoryName: { $regex: data, $options: 'i' } });
-        if (searching) {
-            res.render('./admin/pages/categories', { title: 'Searching', catList: searching })
-
-        } else {
-            res.render('./admin/pages/categories', { title: 'Searching' })
-        }
-
     } catch (error) {
         throw new Error(error)
     }

@@ -38,7 +38,7 @@ const verifyAdmin = expressHandler(async(req,res)=>{
          if(email === email && req.body.password === password){
               
               req.session.admin = email; 
-            res.render('./admin/pages/index',{title:'dashboard'})
+              res.redirect('/admin/dashboard')
          }else{
             res.render('./admin/pages/login', {adminCheck: 'Invalid Credentials',title:'Login'})
          }
@@ -373,8 +373,8 @@ const couponspage = expressHandler(async (req, res) => {
  */
  const addCoupon = expressHandler(async (req, res) => {
     try {
-        const messages = req.flash();
-        res.render("admin/pages/addCoupon", { title: "Add Coupon", messages, data: {} });
+        
+        res.render("admin/pages/addCoupon", { title: "Add Coupon",  data: {} });
     } catch (error) {
         throw new Error(error);
     }
@@ -384,11 +384,35 @@ const couponspage = expressHandler(async (req, res) => {
  * Create Coupon
  * Method POST
  */
+// const createCoupon = expressHandler(async (req, res) => {
+//     try {
+//         const existingCoupon = await Coupon.findOne({ code: req.body.code });
+//         const messages = req.flash();
+//         console.log(req.body);
+
+//         if (!existingCoupon) {
+//             const newCoupon = await Coupon.create({
+//                 code: req.body.code,
+//                 type: req.body.type,
+//                 value: parseInt(req.body.value),
+//                 description: req.body.description,
+//                 expiryDate: req.body.expiryDate,
+//                 minAmount: parseInt(req.body.minAmount),
+//                 maxAmount: parseInt(req.body.maxAmount) || 0,
+//             });
+//             res.redirect("/admin/coupons");
+//         }
+//         req.flash("warning", "Coupon exists with same code");
+//         res.render("admin/pages/addCoupon", { title: "Add Coupon", messages:req.flash(), data: req.body });
+//     } catch (error) {
+//         throw new Error(error);
+//     }
+// });
+
+
 const createCoupon = expressHandler(async (req, res) => {
     try {
         const existingCoupon = await Coupon.findOne({ code: req.body.code });
-        const messages = req.flash();
-        console.log(req.body);
 
         if (!existingCoupon) {
             const newCoupon = await Coupon.create({
@@ -401,13 +425,16 @@ const createCoupon = expressHandler(async (req, res) => {
                 maxAmount: parseInt(req.body.maxAmount) || 0,
             });
             res.redirect("/admin/coupons");
+        } else {
+            req.flash("warning", "Coupon exists with the same code");
+            res.render("admin/pages/addCoupon", { title: "Add Coupon", messages: req.flash(), data: req.body });
         }
-        req.flash("warning", "Coupon exists with same code");
-        res.render("admin/pages/addCoupon", { title: "Add Coupon", messages:req.flash, data: req.body });
     } catch (error) {
         throw new Error(error);
     }
 });
+
+
 
 /**
  * Edit Coupon page
