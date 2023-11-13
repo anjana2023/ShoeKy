@@ -31,6 +31,13 @@ function validateProductForm() {
     const salePriceInput = document.getElementById('salePrice');
     const quantityInput = document.getElementById('quantity');
     const imageInput = document.getElementById('image');
+    const productPrice = parseFloat(productPriceInput.value);
+    const salePrice = parseFloat(salePriceInput.value);
+
+    if (salePrice > 0 && salePrice >= productPrice) {
+        displayError(salePriceInput, "Sale price must be less than the product price");
+        return false; // Prevent form submission
+    }
 
 
     if (productPriceInput.value < 1) {

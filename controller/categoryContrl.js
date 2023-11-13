@@ -26,10 +26,10 @@ const addCategory = expressHandler(async (req, res) => {
 // inserting  categories--
 const insertCategory = expressHandler(async (req, res) => {
     try {
-        const messages = req.flash();
+        // const messages = req.flash();
         const categoryName = req.body.addCategory;
         const regexCategoryName = new RegExp(`^${categoryName}$`, 'i');
-        const findCat = await category.findOne({ categoryName: regexCategoryName ,messages});
+        const findCat = await category.findOne({ categoryName: regexCategoryName });
 
         if (findCat) {
             const catCheck = `Category ${categoryName} Already existing`;
@@ -148,23 +148,19 @@ const editCategory = expressHandler(async (req, res) => {
     }
 })
 
-// update Category name and add offer if there is any--
+
 const updateCategory = expressHandler(async (req, res) => {
     try {
         const id = req.params.id
-        const { updatedName, offer, description, startDate, endDate, } = req.body
-        const cat = await category.findById(id)
-        cat.categoryName = updatedName;
-        cat.offer = offer;
-        cat.description = description;
-        cat.startDate = startDate;
-        cat.endDate = endDate
-        const saved = await cat.save()
+        const updatedName = req.body.updatedName
+        console.log(updatedName);
+        await category.findByIdAndUpdate(id, { $set: { categoryName: updatedName } })
         res.redirect('/admin/category')
     } catch (error) {
         throw new Error(error)
     }
 })
+
 
 
 module.exports = {

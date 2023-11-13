@@ -274,6 +274,10 @@ const logout = (req, res)=>{
  * Method GET
  */
 const editOrder = expressHandler(async (req, res) => {
+    console.log("abcdb fghgbxdvzc")
+    console.log("abcdb fghgbxdvzc")
+    console.log("abcdb fghgbxdvzc")
+
     try {
         const orderId = req.params.id;
         const order = await Order.findOne({ orderId: orderId })

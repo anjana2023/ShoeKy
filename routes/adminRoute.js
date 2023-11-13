@@ -59,9 +59,9 @@ adminRoute.delete('/product/delete-image/:id',adminValidateID, productController
 
 
 adminRoute.get("/orders",isAdminLoggedIn, adminController.ordersPage);
-adminRoute.get("/orders/:id",adminValidateID, isAdminLoggedIn,adminController.editOrder);
-adminRoute.put("/orders/update/:id",adminValidateID, isAdminLoggedIn,adminController.updateOrderStatuss);
-adminRoute.post("/orders/search", adminValidateID,isAdminLoggedIn,adminController.searchOrder);
+adminRoute.get("/orders/:id", isAdminLoggedIn,adminController.editOrder);
+adminRoute.put("/orders/update/:id", isAdminLoggedIn,adminController.updateOrderStatuss);
+adminRoute.post("/orders/search", isAdminLoggedIn,adminController.searchOrder);
 
 
 

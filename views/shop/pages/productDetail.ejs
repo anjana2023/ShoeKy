@@ -77,28 +77,18 @@
                             <span><%= reviews.length %> Ratings</span>
                         </div>
                     </div>
-                    <% if (product.productPrice !==product.salePrice) { %>
-                        <span class="text-decoration-line-through">
-                            ₹<%= (product.productPrice).toLocaleString() %></span>
-                           
-                                <li class="d-inline-block text-dark ">
-                                    <strong>
-                                        <%= product.categoryName.description %>
-                                    </strong>
-                                </li>
-                              
-                        <% } %>
-                            <div class="details-price mb-0">
-                                <span>₹<%= (product.salePrice).toLocaleString() %></span>
-                            </div>
-                            <div class="stock mb-2 text-warning">
-                                <% if (product.quantity>1 && product.quantity < 5 ) { %>
-                                        <span>
-                                            Hurry Only <%= product.quantity%> left!
-                                        </span>
-                                        <% }%>
-                            </div>
-
+                    <span class="text-decoration-line-through">
+                        ₹<%= (product.productPrice).toLocaleString() %></span>
+                    <div class="details-price">
+                        <span>₹<%= (product.salePrice).toLocaleString() %></span>
+                    </div>
+                    <div class="stock mb-3 text-warning">
+                        <% if (product.quantity < 5 && product.quantity>1) { %>
+                            <span>
+                                Hurry Only <%= product.quantity%> left!
+                            </span>
+                            <% }%>
+                    </div>
                     
 
                     <div class="quick-view-select">
@@ -148,7 +138,6 @@
                             <li><a href="#">
                                     <%= product.categoryName.categoryName %>
                                 </a></li>
-                                
                         </ul>
                     </div>
                     <br>
@@ -169,12 +158,12 @@
                             </li>
                             <li>
                                 <a href="#">
-                                    <i class="icofont icofont-social-pinterest"></i>
+                                    <i class="icofont icofont-social-pinterest text-dark"></i>
                                 </a>
                             </li>
                             <li>
                                 <a href="#">
-                                    <i class="icofont icofont-social-flikr"></i>
+                                    <i class="icofont icofont-social-flikr text-secondary "></i>
                                 </a>
                             </li>
                         </ul>

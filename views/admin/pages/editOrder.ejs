@@ -1,7 +1,8 @@
 <div class="row justify-content-center">
     <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header bg-dark text-white d-flex justify-content-between">
+        
+        <div class="card p-2">
+            <div class="card-header bg-success text-white d-flex justify-content-between">
                 <h4 class="mb-0"><%= order.orderId %></h4>
                 <img style="width: 40px; height: 40px" class="rounded-5" src="<%= order.user.image %>" alt="" />
             </div>
@@ -10,8 +11,9 @@
                     <div class="">
                         <h6 class="card-subtitle mb-2 text-muted">Customer Information</h6>
                         <p>
-                            <strong>Name:</strong> <%= order.user.userName %>,  -
-                            <a href="/admin/customers/view/<%= order.user._id %>"><%= order.user.email %></a>
+                            <strong>Name:</strong> <%= order.user.userName %>,   </p>
+                            <p>
+                            <strong>Email: </strong><a href="#"><%= order.user.email %></a>
                         </p>
                         <p><strong>Address:</strong> <%= order.street %>, <%= order.city %>, <%= order.state %></p>
                         <p><strong>Phone: </strong><%= order.phone %></p>
@@ -101,6 +103,7 @@
                         <img
                             style="width: 100px; height: 100px"
                             src="/assets/img/instra/cancelled.svg"
+                        
                             alt="Cancelled"
                             class="icon"
                         />
