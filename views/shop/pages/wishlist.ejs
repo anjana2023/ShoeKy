@@ -2,12 +2,7 @@
     <div class="container">
         <div class="breadcrumb-content text-center pt-1">
             <ul>
-                <li>
-                    <h3><a href="/">Home</a></h3>
-                </li>
-                <li>
-                    <h3 style="color: white;">/</h3>
-                </li>
+               
                 <li>
                     <h3 style="color: white;">Wishlist</h3>
                 </li>
@@ -59,9 +54,9 @@
                                         </tr>
                                         <% }); %>
                                             <% } else { %>
-                                                <div class="d-flex justify-content-center align-items-center">
-                                                    <img src="/assets/img/no-wish-list.png" alt="">
-                                                </div>
+                                                <tr>
+                                                    <td colspan="4">No Items in Wishlist</td>
+                                                </tr>
                                                 <% } %>
 
                                 </tbody>

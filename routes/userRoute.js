@@ -42,6 +42,13 @@ userRoute.post('/login', ensureNotAuthenticated,
 
 userRoute.get('/logout', ensureAuthenticated, userController.userLogout);
 
+// forget-Password and reset password section
+userRoute.get('/forgetPassword', ensureNotAuthenticated, userController.forgotPasswordpage);
+userRoute.post('/forgetPassword', ensureNotAuthenticated, userController.sendResetLink);
+userRoute.get('/resetPassword/:token', ensureNotAuthenticated, userController.resetPassPage);
+userRoute.put('/resetPassword/:token', ensureNotAuthenticated, userController.resetPassword);
+
+
 userRoute.get('/contact', userController.contact);
 userRoute.get('/about', userController.aboutUs);
 

@@ -145,7 +145,7 @@ const dashboardpage = expressHandler(async (req, res) => {
         ]);
 
         const totalOrderCount = await Order.countDocuments();
-        const totalActiveUserCount = await User.countDocuments({ isBlocked: false });
+        const totalActiveUserCount = await User.countDocuments({ isBlock: false });
 
         res.render("admin/pages/dashboard", {
             title: "Dashboard",

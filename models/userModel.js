@@ -28,7 +28,10 @@ const userSchema = new Schema({
     cart: [{
         product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
         quantity: Number,
-    }],addresses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Address' }]
+    }],addresses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Address' }],
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetTokenExpires: Date,
     
 },{timestamps:true});
 
@@ -49,14 +52,14 @@ userSchema.methods.isPasswordMatched = async function (enteredPassword) {
 
 
 
-// // resetPassword
-// userSchema.methods.createResetPasswordToken = async function () {
-//     const resetToken = crypto.randomBytes(32).toString("hex");
-//     this.passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
-//     this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000;
-//     return resetToken;
-// };
 
+// resetPassword
+userSchema.methods.createResetPasswordToken = async function () {
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    this.passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000;
+    return resetToken;
+};
 
 
 userSchema.methods.addToCart = async function (productId, quantity) {

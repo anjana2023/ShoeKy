@@ -5,6 +5,8 @@ const Category = require('../models/categoryModel')
 const Wallet = require('../models/walletModel')
 const asyncHandler = require('express-async-handler')
 const { sendOtp, generateOTP } = require('../utility/nodeMailer')
+const { forgetPassMail } = require('../utility/forgetPassMail')
+const { isValidQueryId } = require('../middlewares/idValidation')
 const crypto = require('crypto')
 const bcrypt = require('bcrypt')
 const Review = require("../models/reviewModel");
@@ -178,6 +180,106 @@ const loadLogin = async (req, res) => {
     }
 }
 
+// forgetPassword_ email inputPage--
+const forgotPasswordpage = asyncHandler(async (req, res) => {
+    try {
+        res.render('./shop/pages/forgetPassEmail')
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
+// sendEmail to reset password--
+const sendResetLink = asyncHandler(async (req, res) => {
+    try {
+        console.log('use', req.body.email);
+        const email = req.body.email;
+        const user = await User.findOne({ email: email });
+
+        if (!user) {
+            req.flash('danger', `User Not found for this ${email}`)
+            res.redirect("/forgetPassword");
+
+        }
+
+        const resetToken = await user.createResetPasswordToken();
+        await user.save();
+
+        const resetUrl = `${req.protocol}://${req.get("host")}/resetPassword/${resetToken}`;
+        console.log('resetUrl', resetUrl);
+
+        try {
+            forgetPassMail(email, resetUrl, user.userName);
+            req.flash('info', `Reset Link sent to this ${email}`)
+            res.redirect("/forgetPassword");
+
+        } catch (error) {
+            user.passwordResetToken = undefined;
+            user.passwordResetTokenExpires = undefined;
+            console.error(error);
+            console.log("There was an error sending the password reset email, please try again later");
+
+            req.flash('Warning', 'Error in sending Email')
+            return res.redirect("/forgetPassword");
+        }
+
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
+// Reset Password page GET
+const resetPassPage = asyncHandler(async (req, res) => {
+    try {
+
+        const token = crypto.createHash("sha256").update(req.params.token).digest("hex");
+        const user = await User.findOne({ passwordResetToken: token, passwordResetTokenExpires: { $gt: Date.now() } });
+
+        if (!user) {
+            req.flash('warning', 'Token expired or Invalid')
+            res.redirect("/forgetPassword");
+        }
+
+        res.render("./shop/pages/resetPassword", { token });
+
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
+// Resetting the password-- POST
+const resetPassword = asyncHandler(async (req, res) => {
+
+    const token = req.params.token;
+    try {
+        const user = await User.findOne({ passwordResetToken: token, passwordResetTokenExpires: { $gt: Date.now() } });
+
+        if (!user) {
+
+            req.flash('warning', 'Token expired or Invalid')
+            res.redirect("/forgetPassword");
+        }
+        const salt = bcrypt.genSaltSync(10);
+        hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+        user.password = hashedPassword;
+        user.passwordResetToken = null;
+        user.passwordResetTokenExpires = null;
+        user.passwordChangedAt = Date.now();
+
+        await user.save();
+
+        console.log('password vhange', user.password)
+        req.flash("success", "Password changed");
+        res.redirect("/login");
+
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
+
+
 // UserLogout----
 const userLogout = async (req, res) => {
     try {
@@ -239,7 +341,7 @@ const shopping = asyncHandler(async (req, res) => {
     if (req.query.search) {
     filter.$or = [
         { title: { $regex: req.query.search, $options: 'i' } },
-        { description: { $regex: req.query.search, $options: 'i' } },
+       
     ];
     // if search and category both included in the query parameters 
     if (req.query.search && req.query.category) {
@@ -560,7 +662,11 @@ module.exports = {
     // search,
     removeItemfromWishlist,
     addTowishlist,
-    wishlist
+    wishlist,
+    forgotPasswordpage,
+    sendResetLink,
+    resetPassPage,
+    resetPassword
 }
 
 

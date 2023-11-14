@@ -82,7 +82,7 @@ exports.placeOrder = asyncHandler(async (req, res) => {
     try {
         const userId = req.user._id;
         const { addressId, payment_method, isWallet } = req.body;
-        console.log("Session Coupon:", req.session.coupon);
+        
         const couponCode = req.session.coupon ? req.session.coupon.code : null;
 
         const coupon = (await Coupon.findOne({ code: couponCode, expiryDate: { $gt: Date.now() } })) || null;
@@ -212,7 +212,7 @@ exports.orderPlaced = asyncHandler(async (req, res) => {
                 await coupon.save();
             }
             const wallet = await Wallet.findOne({ user: req.user._id });
-            wallet.balance = order.wallet;
+            wallet.balance -= order.wallet;
             await wallet.save();
         } else if (order.payment_method === "wallet_payment") {
             for (const item of order.orderItems) {

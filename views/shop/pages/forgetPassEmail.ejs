@@ -1,0 +1,67 @@
+<div class="register-area ptb-100">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-12 col-lg-6 col-xl-6 ms-auto me-auto">
+                <%- include('../partials/flash.ejs') %>
+                
+                    <h1 class="cart-heading">forgot password</h1>
+                    <div class="login">
+                        <div class="login-form-container ">
+                            <div class="login-form ">
+                                <form action="/forgetPassword" method="post" onsubmit="return validateForm()">
+                                    <div style="color: red;" id="email-error"></div>
+                                    <input type="email" name="email" placeholder="Email" />
+                                    <div class="d-flex gap-5">
+                                        <div class="button-box">
+                                            <button type="submit" class="default-btn floatright">Reset
+                                                Password</button>
+                                        </div>
+                                </form>
+                                <div class="button-box">
+                                    <a href="/login"><button type="button" class="default-btn ">Login
+                                            now</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    const alert = document.getElementById('message')
+    setTimeout(() => {
+        alert.style.display = 'none'
+    }, 3000);
+
+    let isValidMail = false;
+    document.addEventListener('DOMContentLoaded', function () {
+        const emailInput = document.querySelector('input[name="email"]');
+        emailInput.addEventListener('blur', function () {
+            validateEmail(emailInput);
+        });
+
+    });
+    function validateEmail(input) {
+        const emailError = document.getElementById('email-error');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (input.value.trim() === '') {
+            emailError.textContent = 'Email is required.';
+            isValidMail = false;
+        } else if (!emailRegex.test(input.value)) {
+            emailError.textContent = 'Invalid email.';
+            isValidMail = false;
+        } else {
+            emailError.textContent = '';
+            isValidMail = true;
+        }
+    }
+
+    function validateForm() {
+        if (!isValidMail) {
+            return false;
+        }
+        return true;
+    }
+</script>
