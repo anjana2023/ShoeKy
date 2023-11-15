@@ -84,38 +84,11 @@ const unList = expressHandler(async (req, res) => {
 
 })
 
-// // edit Category form --
-// const editCategory = expressHandler(async (req, res) => {
 
-//     try {
-//         const { id } = req.params
-//         const catName = await category.findById(id);
-//         if (catName) {
-//             res.render('./admin/pages/editCategory', { title: 'editCategory', values: catName });
-//         } else {
-//             console.log('error in rendering');
-//         }
-//     } catch (error) {
-//         throw new Error(error)
-//     }
-// })
-
-// // update Category name --
-// const updateCategory = expressHandler(async (req, res) => {
-//     try {
-//         const id = req.params.id
-//         const updatedName = req.body.updatedName
-//         console.log(updatedName);
-//         await category.findByIdAndUpdate(id, { $set: { categoryName: updatedName } })
-//         res.redirect('/admin/category')
-//     } catch (error) {
-//         throw new Error(error)
-//     }
-// })
 
 // searchcCategory----
 const searchCategory = expressHandler(async (req, res) => {
-    console.log(req.body.search);
+    
     try {
         const data = req.body.search
         const searching = await category.find({ categoryName: { $regex: data, $options: 'i' } });
@@ -148,19 +121,22 @@ const editCategory = expressHandler(async (req, res) => {
     }
 })
 
-
 const updateCategory = expressHandler(async (req, res) => {
     try {
         const id = req.params.id
-        const updatedName = req.body.updatedName
-        console.log(updatedName);
-        await category.findByIdAndUpdate(id, { $set: { categoryName: updatedName } })
+        const { updatedName, offer, description, startDate, endDate, } = req.body
+        const cat = await category.findById(id)
+        cat.categoryName = updatedName;
+        cat.offer = offer;
+        cat.description = description;
+        cat.startDate = startDate;
+        cat.endDate = endDate
+        const saved = await cat.save()
         res.redirect('/admin/category')
     } catch (error) {
         throw new Error(error)
     }
 })
-
 
 
 module.exports = {

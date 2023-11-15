@@ -207,4 +207,118 @@ module.exports = {
             return {};
         }
     }),
+
+generateInvoice: asyncHandler(async (orderId) => {
+    const order = await OrderItem.findById(orderId).populate("product");
+    const orders = await Order.findOne({ orderItems: order._id });
+    const data = {
+        content: [
+            {
+                text: "INVOICE",
+                style: "header",
+                alignment: "center",
+                margin: [0, 0, 0, 20],
+            },
+            {
+                columns: [
+                    {
+                        width: "*",
+                        stack: [
+                            { text: `Order Date: ${order.createdAt.toLocaleDateString()}` },
+                            { text: `Order ID: ${orders.orderId}` },
+                        ],
+                    },
+                    {
+                        width: "*",
+                        stack: [
+                            { text: `Delivered Date: ${order.deliveredDate.toLocaleDateString()}`, alignment: "right" },
+                        ],
+                    },
+                ],
+            },
+            {
+                columns: [
+                    {
+                        width: "*",
+                        text: [
+                            { text: "Billing Address:", style: "subheader" },
+                            {
+                                text: [
+                                    orders.shippingAddress,
+                                    orders.street,
+                                    orders.city,
+                                    orders.state,
+                                    orders.zip,
+                                    orders.phone,
+                                ].join("\n"),
+                                style: "address",
+                            },
+                        ],
+                    },
+                    {
+                        width: "*",
+                        text: [
+                            { text: "Payment Information:", style: "subheader" },
+                            `Payment Method: ${orders.payment_method}\nPayment Status: ${order.isPaid}\nWallet Payment: ₹${orders.wallet}`,
+                        ],
+                    },
+                ],
+                margin: [0, 20, 0, 10],
+            },
+            { text: "Order Summary:", style: "subheader", margin: [0, 20, 0, 10] },
+            {
+                table: {
+                    body: [
+                        [
+                            { text: "Product", style: "tableHeader" },
+                            { text: "Quantity", style: "tableHeader" },
+                            { text: "Price", style: "tableHeader" },
+                        ],
+                        [
+                            order.product.title,
+                            order.quantity,
+                            { text: `₹${parseFloat(order.price).toFixed(2)}`, alignment: "right" },
+                        ],
+                        ["Subtotal", "", { text: `₹${parseFloat(orders.totalPrice).toFixed(2)}`, alignment: "right" }],
+                        ["Total", "", { text: `₹${parseFloat(orders.totalPrice).toFixed(2)}`, alignment: "right" }],
+                    ],
+                },
+            },
+            { text: "Thank you for shopping with us!", style: "thankYou", alignment: "center", margin: [0, 20, 0, 0] },
+        ],
+        styles: {
+            header: {
+                fontSize: 24,
+                bold: true,
+                decoration: "underline",
+            },
+            subheader: {
+                fontSize: 16,
+                bold: true,
+            },
+            address: {
+                fontSize: 14,
+            },
+            info: {
+                fontSize: 14,
+            },
+            tableHeader: {
+                fillColor: "#337ab7",
+                color: "#ffffff",
+                alignment: "center",
+                bold: true,
+            },
+            tableCell: {
+                fillColor: "#f2f2f2",
+                alignment: "center",
+            },
+            thankYou: {
+                fontSize: 16,
+                italic: true,
+            },
+        },
+    };
+
+    return data;
+}),
 };

@@ -1,4 +1,4 @@
-
+<!-- login-area start -->
 <div class="breadcrumb-area" style="background-color: black; color: white;">
     <div class="container">
         <div class="breadcrumb-content text-center pt-1">
@@ -6,41 +6,52 @@
                 <li>
                     <h3 style="color: white;">Login  </h3>
                 </li>
-              
+               <li></li>
                 
             </ul>
         </div>
     </div>
 </div>
-       
 
-        <%- include('../partials/flash.ejs') %>
-        <!-- login-area start -->
-        <div class="register-area ptb-100">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12 col-12 col-lg-6 col-xl-6 ms-auto me-auto">
-                        <div class="login">
-                            <div class="login-form-container">
-                                <div class="login-form">
-                                    <form action=" " method="post">
-                                        <input type="email" name="email" placeholder="Email">
-                                        <input type="password" name="password" placeholder="Password">
-                                        <div class="button-box">
-                                            <div class="login-toggle-btn">
-                                                <a href="/forgetPassword">Forgot Password?</a>
-                                            </div>
-                                            <button type="submit" class="default-btn floatright">Login</button>
-                                            <a href="/register">Don't have an account ? Register now</a>
-                                        </div>
-                                    </form>
+<div class="register-area ptb-100">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-12 col-lg-6 col-xl-6 ms-auto me-auto">
+                <%- include('../partials/flash.ejs') %>
+                <div class="login">
+                   
+                    <div class="login-form-container">
+                        <div class="login-form">
+                            <form action="/login" method="post" id="loginForm">
+                                <input type="email" name="email" placeholder="Email" />
+                                <p class="text-danger" id="emailError"></p>
+                                <input type="password" name="password" placeholder="Password" />
+                                <p class="text-danger" id="passwordError"></p>
+                                
+                                <div class="button-box">
+                                    <div class="login-toggle-btn">
+                                       
+                                        <a href="/forgetPassword">Forgot Password?</a>
+                                    </div>
+                                    
+                                    <button type="submit" class="default-btn text-center ">Login</button>
+                                    <br><br>
+                                    <div class="text-center">
+                                    <a href="/register">Don't have an account ? Register now</a>
                                 </div>
-                            </div>
+                                </div>
+                            </form>
+                            <!-- Add spacing and center-align the Google button -->
+                           
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- login-area end -->
+    </div>
+</div>
+
+
+        <script src="/assets/js/shop/loginValidation.js"></script>
 
 	

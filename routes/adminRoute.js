@@ -77,8 +77,8 @@ adminRoute.post("/coupon/edit/:id",adminValidateID, isAdminLoggedIn,adminControl
 
 
 adminRoute.get("/sales-report",isAdminLoggedIn, adminController.salesReportpage);
-adminRoute.get("/sales-data", isAdminLoggedIn,adminController.getSalesData)
-adminRoute.get("/get/sales-report", isAdminLoggedIn,adminController.generateSalesReport);
+adminRoute.get("/sales-data-weekly", adminController.getSalesData);
+adminRoute.get("/get/sales-report", adminController.generateSalesReport);
 
 adminRoute.get('*', (req, res) => { res.render('./admin/page404', { title: 'Error' }) })
 

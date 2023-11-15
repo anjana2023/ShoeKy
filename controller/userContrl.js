@@ -328,7 +328,9 @@ const shopping = asyncHandler(async (req, res) => {
         });
 
         const filter = { isListed: true };
-        let cat = '65210560158326ec6474a2e7'
+       
+        let cat = '6521056a158326ec6474a2ea'
+
         if (req.query.category) {
             // Check if the category name exists in the mapping
             if (categoryMapping.hasOwnProperty(req.query.category)) {
@@ -375,6 +377,21 @@ const shopping = asyncHandler(async (req, res) => {
             if (req.query.sort === 'highToLow') {
                 sortCriteria.salePrice = -1;
             }
+        }
+            //filter by both category and price
+        if (req.query.category && req.query.sort) {
+         if (categoryMapping.hasOwnProperty(req.query.category)) {
+        filter.categoryName = categoryMapping[req.query.category];
+            } else {
+        filter.categoryName = cat
+         }
+
+        if (req.query.sort) {
+        sortCriteria.salePrice = 1;
+         }
+        if (req.query.sort === 'highToLow') {
+        sortCriteria.salePrice = -1;
+     }
         }
 
 

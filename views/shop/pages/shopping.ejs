@@ -141,7 +141,7 @@
                                                                                 <% } %>
                                                                     </a>
                                                                     <% } else { %>
-                                                                        <a class="btn-hover list-btn-wishlist"
+                                                                        <a class="animate-right" id="wishlist" title="wishlist"
                                                                             href="/login"> <i
                                                                                 class="pe-7s-like"></i></a>
                                                                         <% } %>
@@ -164,10 +164,21 @@
                                                             <h4><a href="/viewProduct/<%= element?._id %>">
                                                                     <%= element.title %>
                                                                 </a></h4>
-                                                            <span class="text-decoration-line-through">
-                                                                ₹<%= (element.productPrice).toLocaleString() %></span>
-                                                            <br>
+                                                                <span class="text-decoration-line-through">
+                                                                <% if (element.productPrice !==element.salePrice) { %>
+                                                                    ₹<%= element.productPrice %>
+                                                                        <% } %>
+                                                            </span>
                                                             <span>₹<%= (element.salePrice).toLocaleString() %></span>
+                                                            
+                                                            <% if (element.productPrice !==element.salePrice) { %>
+                                                                    <li class="d-inline-block text-success ">
+                                                                        <strong>
+                                                                            <%= element.categoryName.description %>
+                                                                        </strong>
+                                                                    </li>
+                                                                    <% } %>
+
                                                         </div>
                                                        
                                                 </div>

@@ -103,7 +103,7 @@ userRoute.put("/orders/:id", orderController.cancelOrder);
 userRoute.put("/orders/single/:id", orderController.cancelSingleOrder);
 userRoute.post("/orders/return/:id", orderController.returnOrder);
 
-
+userRoute.get("/orders/download/:id", orderController.donwloadInvoice);
 //checkout routes
             
 userRoute.post("/checkout", checkoutController.checkoutpage);

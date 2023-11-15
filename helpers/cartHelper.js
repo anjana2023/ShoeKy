@@ -80,12 +80,30 @@ const incrementQuantity = async (userId, productId, res) => {
     }
 };
 
+
 const decrementQuantity = async (userId, productId, res) => {
     const updatedCart = await Cart.findOne({ user: userId });
     const productToDecrement = updatedCart.products.find((item) => item.product.equals(productId));
 
     if (productToDecrement) {
-        productToDecrement.quantity -= 1;
+        // Check if quantity is greater than 1 before decrementing
+        if (productToDecrement.quantity > 1) {
+            productToDecrement.quantity -= 1;
+        } else {
+            // If quantity is already 1, do not decrease
+            const cart = await Cart.findOne({ user: userId }).populate("products.product");
+            const { subtotal, total } = calculateCartTotals(cart.products);
+            const product = await findProductById(productId);
+
+            return res.json({
+                message: "Quantity cannot be decreased further.",
+                status: "warning",
+                quantity: productToDecrement.quantity,
+                productTotal: product ? product.salePrice : 0,
+                subtotal,
+                total,
+            });
+        }
 
         if (productToDecrement.quantity <= 0) {
             updatedCart.products = updatedCart.products.filter((item) => !item.product.equals(productId));
@@ -101,8 +119,8 @@ const decrementQuantity = async (userId, productId, res) => {
         res.json({
             message: "Quantity Decreased",
             quantity: productToDecrement.quantity,
-            status: "warning",
-            productTotal: product.salePrice * productToDecrement.quantity,
+            status: "success",
+            productTotal: product ? product.salePrice * productToDecrement.quantity : 0,
             subtotal,
             total,
         });
@@ -113,11 +131,13 @@ const decrementQuantity = async (userId, productId, res) => {
         res.json({
             message: "Product not found in the cart.",
             status: "error",
+            quantity: 0,
+            productTotal: product ? product.salePrice : 0,
             subtotal,
             total,
-            productTotal: product.salePrice * productToDecrement.quantity,
         });
     }
 };
+
 
 module.exports = { decrementQuantity, findCartItem, findProductById, incrementQuantity, calculateCartTotals };
