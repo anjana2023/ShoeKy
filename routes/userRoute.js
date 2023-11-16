@@ -72,7 +72,7 @@ userRoute.get('/deleteAddress/:id', ensureAuthenticated, addressController.delet
 userRoute.get('/shop', userController.shopping);   /* shopping page */
 userRoute.get('/viewProduct/:id',  userController.viewProduct); /* view single product */
 
-// userRoute.get('/categoryShop',userController.categoryPage)
+
 
 userRoute.get('/wishlist', ensureAuthenticated,userController.wishlist);
 userRoute.get('/addTo-wishlist/:id',  ensureAuthenticated, userController.addTowishlist);
@@ -81,9 +81,7 @@ userRoute.get('/removeWishlist/:id', ensureAuthenticated, userController.removeI
 userRoute.post("/review/add/:id", userController.addReview);
 userRoute.get("/wallet/:id",ensureAuthenticated, userController.walletTransactionspage);
 
-//search 
 
-// userRoute.post('/shop/search', userController.search);
 
 // cart_section-- 
 userRoute.get('/cart', ensureAuthenticated, cartController.cartpage);

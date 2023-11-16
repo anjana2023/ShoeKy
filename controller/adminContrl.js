@@ -201,7 +201,7 @@ const logout = (req, res)=>{
             })
             .select("orderId orderedDate shippingAddress city zip totalPrice")
             .sort({ orderedDate: -1 });
-        // res.json(orders);
+      
         res.render("admin/pages/orders", { title: "Orders", orders });
     } catch (error) {
         throw new Error(error);
@@ -254,7 +254,7 @@ const updateOrderStatuss = expressHandler(async (req, res) => {
    console.log(req.body.status)
    console.log(status)
    const newStatus = req.body.status
-        // const order = await updateOrderStatus(orderId, req.body.status);\
+        
         const order = await OrderItem.findByIdAndUpdate(orderId, { status: newStatus })
         if (req.body.status === status.shipped) {
             order.shippedDate = Date.now();
@@ -327,31 +327,6 @@ const couponspage = expressHandler(async (req, res) => {
  * Create Coupon
  * Method POST
  */
-// const createCoupon = expressHandler(async (req, res) => {
-//     try {
-//         const existingCoupon = await Coupon.findOne({ code: req.body.code });
-//         const messages = req.flash();
-//         console.log(req.body);
-
-//         if (!existingCoupon) {
-//             const newCoupon = await Coupon.create({
-//                 code: req.body.code,
-//                 type: req.body.type,
-//                 value: parseInt(req.body.value),
-//                 description: req.body.description,
-//                 expiryDate: req.body.expiryDate,
-//                 minAmount: parseInt(req.body.minAmount),
-//                 maxAmount: parseInt(req.body.maxAmount) || 0,
-//             });
-//             res.redirect("/admin/coupons");
-//         }
-//         req.flash("warning", "Coupon exists with same code");
-//         res.render("admin/pages/addCoupon", { title: "Add Coupon", messages:req.flash(), data: req.body });
-//     } catch (error) {
-//         throw new Error(error);
-//     }
-// });
-
 
 const createCoupon = expressHandler(async (req, res) => {
     try {
@@ -505,7 +480,7 @@ const getSalesData = async (req, res) => {
 module.exports = {
     loadLogin,
     verifyAdmin,
-    // loadDashboard,
+    
     userManagement,
     searchUser,
     blockUser,

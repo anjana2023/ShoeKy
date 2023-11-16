@@ -171,7 +171,7 @@ const editImage = asyncHandler(async (req, res) => {
 const deleteImage = asyncHandler(async (req, res) => {
     try {
         const imageId = req.params.id;
-        // Optionally, you can also remove the image from your database
+       
         await Images.findByIdAndRemove(imageId);
         const product = await Product.findOneAndUpdate(
             { images: imageId },

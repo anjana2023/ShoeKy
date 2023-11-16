@@ -1,9 +1,5 @@
 
-// const errorMessage = document.getElementById('error-message');
 
-// const hide = (element) => {
-//     element.style.display = 'none';
-// }
 function displayError(inputField, message) {
     const errorMessage = inputField.nextElementSibling;
     if (errorMessage && errorMessage.classList.contains('error-message')) {

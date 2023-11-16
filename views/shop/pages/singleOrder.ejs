@@ -249,8 +249,7 @@
                 invoiceButton.textContent = "Download Invoice";
             })
             .catch((error) => {
-                // Handle errors here
-                // Re-enable the button and restore its original text
+                
                 invoiceButton.disabled = false;
                 invoiceButton.textContent = "Download Invoice";
                 console.error("An error occurred:", error);

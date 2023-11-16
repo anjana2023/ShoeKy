@@ -52,7 +52,7 @@ const insertUser = async (req, res) => {
             
             req.session.otpUser = { ...UserData, otp: OTP };
             console.log(req.session.otpUser.otp)
-            // req.session.mail = req.body.email;  
+           
 
             /***** otp sending ******/
             try {
@@ -556,56 +556,7 @@ const walletTransactionspage = asyncHandler(async (req, res) => {
 });
 
 
-//search products
 
-
-//search
-// const search =asyncHandler( async (req, res) => {
-//     console.log(req.body.search);
-//     try {
-//         const data = req.body.search;
-//         const user = req.user;
-//         const page = req.query.p || 1;
-//         const limit = 3;
-//         const listedCategories = await Category.find({ isListed: true });
-//         // Get the IDs of the listed categories
-//         const listedCategoryIds = listedCategories.map(category => category._id);
-        
-//         const searching = await Product.find({ title: { $regex: data, $options: 'i' } }).populate('images')
-//         .skip((page - 1) * limit)
-//         .limit(limit);
-//         console.log(user);
-//         const count = await Product.find(
-//             { categoryName: { $in: listedCategoryIds }, isListed: true })
-//             .countDocuments();
-//             let cartProductIds;
-//             let userWishlist;
-//             if (user) {
-//                 if (user.cart||user.wishlist) {
-//                     cartProductIds = user.cart.map(cartItem => cartItem.product.toString());
-//                     userWishlist = user.wishlist;
-//                 }
-    
-//             } else {
-//                 cartProductIds = null;
-    
-//             }
-            
-//         if (searching.length>0) {
-//             res.render('./shop/pages/shopping', { user, userWishlist,cartProductIds, catList: searching ,products:searching, category: listedCategories,currentPage: page,
-//             totalPages: Math.ceil(count / limit)
-//            })
-
-//         } else {
-//             res.render('./shop/pages/shopping', { user, cartProductIds, catList: searching ,products:searching, category: listedCategories,currentPage: page,
-//                 totalPages: Math.ceil(count / limit)
-//                })
-//         }
-
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// })
 
 const wishlist = asyncHandler(async (req, res) => {
     try {
@@ -673,10 +624,10 @@ module.exports = {
     viewProduct,
     contact,
     aboutUs,
-    // categoryPage,
+   
     walletTransactionspage,
     addReview,
-    // search,
+    
     removeItemfromWishlist,
     addTowishlist,
     wishlist,

@@ -22,7 +22,7 @@ adminRoute.post('/', adminController.verifyAdmin);
 adminRoute.get('/logout', isAdminLoggedIn, adminController.logout)
 
 // adminController.userManagement---
-// adminRoute.get('/dashboard', isAdminLoggedIn, adminController.loadDashboard)
+
 adminRoute.get("/dashboard",isAdminLoggedIn, adminController.dashboardpage);
 
 adminRoute.get('/user', isAdminLoggedIn, adminController.userManagement)

@@ -1,4 +1,3 @@
-// orderHelper.js
 
 const asyncHandler = require("express-async-handler");
 const Address = require("../models/addressModel");
