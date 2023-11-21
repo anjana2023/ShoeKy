@@ -9,7 +9,7 @@
 
                         <!-- Display order details from the provided data -->
                         <p class="text-center" ><strong>Order ID:</strong> <span style="color: #333;"><%= order.orderId %></span></p>
-                        <p class="text-center" ><strong>Shipping Address:</strong> <span style="color: #333;"><%= order.street %>, <%= order.city %>, <%= order.state %></span></class="text-center" >
+                        <p class="text-center" ><strong>Shipping Address:</strong> <span style="color: #333;"><%= order.shippingAddress %></span></class="text-center" >
                         <p class="text-center" ><strong>Phone:</strong> <span style="color: #333;"><%= order.phone %></span></class="text-center" >
                         <p class="text-center" ><strong>Total Price:</strong> <span style="color: #333;">₹<%= order.totalPrice %></span></class="text-center" >
                         <p class="text-center" ><strong>Ordered Date:</strong> <span style="color: #333;"><%= new Date(order.orderedDate).toLocaleString() %></span></p>

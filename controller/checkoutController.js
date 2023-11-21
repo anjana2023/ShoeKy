@@ -82,12 +82,9 @@ exports.placeOrder = asyncHandler(async (req, res) => {
     try {
         const userId = req.user._id;
         const { addressId, payment_method, isWallet } = req.body;
-        
-        const couponCode = req.session.coupon ? req.session.coupon.code : null;
-
-        const coupon = (await Coupon.findOne({ code: couponCode, expiryDate: { $gt: Date.now() } })) || null;
-        // const coupon = (await Coupon.findOne({ code: req.session.coupon.code, expiryDate: { $gt: Date.now() } })) || null;
-
+    
+        const coupon =
+        (await Coupon.findOne({ code: req?.session?.coupon?.code, expiryDate: { $gt: Date.now() } })) || null;
         const newOrder = await checkoutHelper.placeOrder(userId, addressId, payment_method, isWallet, coupon);
         if (payment_method === "cash_on_delivery") {
             res.status(200).json({
@@ -180,13 +177,10 @@ exports.orderPlaced = asyncHandler(async (req, res) => {
     try {
         const orderId = req.params.id;
         
-        console.log("Session Coupon:", req.session.coupon);
-        const couponCode = req.session.coupon ? req.session.coupon.code : null;
-
-        const coupon = (await Coupon.findOne({ code: couponCode, expiryDate: { $gt: Date.now() } })) || null;
-        // const coupon = (await Coupon.findOne({ code: req.session.coupon.code })) || null;
+        const coupon = (await Coupon.findOne({ code: req?.session?.coupon?.code })) || null;
+       
         const userId = req.user._id;
-        console.log(userId)
+       
         // Populate the order details, including product details
         const order = await Order.findById(orderId).populate({
             path: "orderItems",
@@ -224,7 +218,7 @@ exports.orderPlaced = asyncHandler(async (req, res) => {
                 await coupon.save();
             }
             const wallet = await Wallet.findOne({ user: req.user._id });
-            wallet.balance -= order.totalPrice;
+            wallet.balance -= order.wallet;
             await wallet.save();
         }
         if (cartItems) {
@@ -370,7 +364,7 @@ exports.updateCoupon = asyncHandler(async (req, res) => {
             if (coupon.usedBy.includes(userid)) {
                 res.status(202).json({
                     status: "danger",
-                    message: "The coupon is alrady used",
+                    message: "The coupon is already used",
                 });
             } else if (subtotal < coupon.minAmount) {
                 res.status(200).json({

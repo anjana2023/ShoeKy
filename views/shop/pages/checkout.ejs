@@ -27,14 +27,19 @@
                 <h6 class="mt-2 text-success" id="couponError"><%= coupon ? "" : couponMessage?.message %></h6>
             </div>
             <!--   -->
+            
             <form action="/place-order" method="post">
+                <br>
+                <br>
                 <div class="row">
+                    
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="checkbox-form">
                             <div class="d-flex">
                                 <h3>Select Address</h3>
                                 <a href="/addAddress" class="btn btn-sm btn-dark" title="Add New Address">Add</a>
                             </div>
+                           
                             <div class="different-address">
                                 <div id="" class="row">
                                     <% if (address && address.length) { %> <% address.forEach((item, index) => { %>
@@ -45,13 +50,15 @@
                                                     <input class="form-check-input" type="radio" name="addressId"
                                                     id="address<%= index %>" value="<%= item._id %>" required <%= index ===
                                                     0 ? "checked" : "" %> />
+                                                    <br>
                                                     <label class="form-check-label" for="address<%= index %>">
-                                                        <h5 class="card-title"><%= item.title %></h5>
+                                                        <h5 class="card-title text-secondary"><%= item.name %></h5>
                                                         <p class="card-text">
-                                                            <%= item.street %>, <%= item.city %>, <%= item.state %>, <%=
-                                                            item.pincode %>
+                                                            <%= item.shippingAddress %>, <%= item.town %>, <%= item.state %>, <%=
+                                                            item.postCode %>
+                                                             
                                                         </p>
-                                                        <p class="card-text">Mobile: +91 <%= item.mobile %></p>
+                                                        <p class="card-text">Mobile: +91 <%= item.phone %></p>
                                                     </label>
                                                 </div>
                                             </div>

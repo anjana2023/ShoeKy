@@ -1,62 +1,69 @@
-<main class="col-md-9 mx-auto col-lg-10 px-md-4">
-  <div class="container ">
-    <div class="text-center mb-4">
-      <h2 class="display-5 fw-bold"> Account Details</h2>
-    </div>
-    <div class="card shadow-lg p-4">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="mb-4">
-            <h3 class="h4 fw-bold">Name:</h3>
-            <p class="lead"><%= user.userName %></p>
-          </div>
-          <div class="mb-4">
-            <h3 class="h4 fw-bold">Email:</h3>
-            <p class="lead"><%= user.email %></p>
-          </div>
-        </div>
-     
-      </div>
-    </div>
-    <div class="row mt-5 mb-3">
-      <div class="col-md-3">
-        <div class="card shadow">
-          <a href="/orders" class="text-decoration-none text-center p-4 d-block">
-            <i class="fas fa-shopping-bag fa-3x text-primary mb-3"></i>
-            <h3 class="h4 fw-bold">Orders</h3>
-            <p class="text-muted">Check your orders</p>
-          </a>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card shadow">
 
-  
-          <a href="/wallet/<%= wallet?._id %>" class="text-decoration-none text-center p-4 d-block">
-            <i class="pe-7s-wallet fa-3x text-danger mb-3"></i>
-            <h3 class="h4 fw-bold">Wallet</h3>
-            <p class="text-muted"> ₹ <%= wallet?.balance ? wallet.balance.toFixed(2) : "0" %></p>
-          </a>
+
+<body >
+
+    <main class="col-md-9 mx-auto col-lg-10 px-md-4">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 class="display-7 fw-bold text-dark">Account</h2>
+            </div>
+            <div class="card shadow-lg p-4" style="background-color: #f4f4f43d; border-radius: 15px;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h3 class="h4 fw-bold">Name:</h3>
+                            <p class="lead"><%= user.userName %></p>
+                        </div>
+                        <div class="mb-4">
+                            <h3 class="h4 fw-bold">Email:</h3>
+                            <p class="lead"><%= user.email %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5 mb-3">
+                <div class="col-md-3">
+                    <div class="card shadow">
+                        <a href="/orders" class="text-decoration-none text-center p-4 d-block"
+                            style="color: #155724; background-color: #d4edda; border-radius: 15px;">
+                            <i class="fas fa-shopping-bag fa-3x text-success mb-3"></i>
+                            <h3 class="h4 fw-bold">Orders</h3>
+                            <p class="text-muted">View your orders</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow">
+                        <a href="/wallet/<%= wallet?._id %>" class="text-decoration-none text-center p-4 d-block"
+                            style="color: #004085; background-color: #cce5ff; border-radius: 15px;">
+                            <i class="fas fa-wallet fa-3x text-primary mb-3"></i>
+                            <h3 class="h4 fw-bold">Wallet</h3>
+                            <p class="text-muted">Balance: ₹ <%= wallet?.balance ? wallet.balance.toFixed(2) : "0" %></p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow">
+                        <a href="/cart" class="text-decoration-none text-center p-4 d-block"
+                            style="color: #856404; background-color: #ffeeba; border-radius: 15px;">
+                            <i class="fas fa-shopping-cart fa-3x text-warning mb-3"></i>
+                            <h3 class="h4 fw-bold">Cart</h3>
+                            <p class="text-muted">Check your shopping cart</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow">
+                        <a href="/savedAddress" class="text-decoration-none text-center p-4 d-block"
+                            style="color: #0c5460; background-color: #d1ecf1; border-radius: 15px;">
+                            <i class="fas fa-map-marker-alt fa-3x text-info mb-3"></i>
+                            <h3 class="h4 fw-bold">Address</h3>
+                            <p class="text-muted">Manage your saved addresses</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card shadow">
-          <a href="/cart" class="text-decoration-none text-center p-4 d-block">
-            <i class="fas fa-shopping-cart fa-3x text-success mb-3"></i>
-            <h3 class="h4 fw-bold">Cart</h3>
-            <p class="text-muted">Check your Cart</p>
-          </a>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card shadow">
-          <a href="/savedAddress" class="text-decoration-none text-center p-4 d-block">
-            <i class="fas fa-map-marker-alt fa-3x text-info mb-3"></i>
-            <h3 class="h4 fw-bold">Address</h3>
-            <p class="text-muted">Saved Addresses & Edit</p>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
+    </main>
+
+   
